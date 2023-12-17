@@ -1,0 +1,162 @@
+aggregates:
+  Inscription:
+    metadata:
+      Preprocessors:
+        - MOVE_CRUD_IT
+      CRUD_IT_NO_DELETE: true
+      CRUD_IT_NO_UPDATE: true
+      CRUD_IT_CREATE_METHOD_NAME: Mint
+    id:
+      name: Id
+      type: UID
+    properties:
+      Hash:
+        type: vector<u8>
+      SlotNumber:
+        type: u8
+      Round:
+        type: u64
+      Inscriber:
+        type: address
+      Timestamp:
+        type: u64
+      Amount:
+        type: u64
+      Content:
+        type: String
+        length: 1000
+    methods:
+      Mint:
+        event:
+          name: InscriptionMinted
+          isObjectShared: true
+          #isObjectFrozen: true
+
+  Certificate:
+    metadata:
+      Preprocessors:
+        - MOVE_CRUD_IT
+      CRUD_IT_NO_DELETE: true
+      CRUD_IT_NO_UPDATE: true
+      CRUD_IT_CREATE_METHOD_NAME: Issue
+    friends:
+      - Slot.Advance
+    id:
+      name: Id
+      type: UID
+    properties:
+      InscriptionObjectId:
+        type: ID
+      InscriptionHash:
+        type: vector<u8>
+      SlotNumber:
+        type: u8
+      Round:
+        type: u64
+      Inscriber:
+        type: address
+      InscriptionTimestamp:
+        type: u64
+      Amount:
+        type: u64
+      InscriptionContent:
+        type: String
+        length: 1000
+      CertificateType:
+        type: u8
+        #type: CertificateType
+    methods:
+      Issue:
+        event:
+          name: CertificateIssued
+          #isObjectShared: true
+          isObjectFrozen: true
+          properties:
+            Inscriber:
+              #type: address
+              isOwner: true # Transfer the object to the account address indicated by this property
+
+  Slot:
+    metadata:
+      Preprocessors:
+        - MOVE_CRUD_IT
+      CRUD_IT_NO_DELETE: true
+      CRUD_IT_NO_UPDATE: true
+      #CRUD_IT_CREATE_METHOD_NAME: Create
+    id:
+      name: SlotNumber
+      type: u8
+      generator:
+        class: assigned # 'increment', 'UUID', etc.
+        tableName: SlotNumberTable # Used to check the assigned Id., etc.
+    properties:
+      GenesisTimestamp:
+        type: u64
+      MintedAmount:
+        type: u64
+      Round:
+        type: u64
+        defaultLogic:
+          Move:
+            '0'
+      QualifiedRound:
+        type: u64
+        description: previous qualified round
+      QualifiedInscriptionId:
+        type: ID
+        description: previous qualified inscription Id.
+      QualifiedHash:
+        type: vector<u8>
+        description: previous qualified inscription hash.
+      QualifiedTimestamp:
+        type: u64
+        description: previous qualified inscription timestamp.
+      QualifiedDifference:
+        type: u64
+        description: previous qualified difference.
+      CandidateInscriptionId:
+        type: ID
+        description: candidate inscription Id.
+      CandidateHash:
+        type: vector<u8>
+        description: candidate inscription hash.
+      CandidateTimestamp:
+        type: u64
+        description: candidate inscription timestamp.
+      CandidateDifference:
+        type: u64
+        description: candidate difference.
+    methods:
+      Create:
+        event:
+          name: SlotCreated
+          isObjectShared: true
+          #isObjectFrozen: true
+
+      PutUpCandidate:
+        event:
+          name: CandidateInscriptionPutUp
+          #properties:
+        parameters:
+          CadidateInscription:
+            referenceType: Inscription
+            eventPropertyName: CadidateInscriptionId
+          Clock:
+            referenceType: Clock
+            isIgnoredInEvent: true
+
+      Advance:
+        description: advance it to the next round.
+        event:
+          name: SlotAdvanced
+          #properties:
+        parameters:
+          CadidateInscription:
+            referenceType: Inscription
+            eventPropertyName: CadidateInscriptionId
+          WitnessInscription:
+            referenceType: Inscription
+            eventPropertyName: WitnessInscriptionId
+          Clock:
+            referenceType: Clock
+            isIgnoredInEvent: true
