@@ -203,12 +203,6 @@ module sui_inscription::inscription {
         transfer::share_object(inscription);
     }
 
-    #[lint_allow(share_owned)]
-    public(friend) fun update_version_and_share_object(inscription: Inscription) {
-        update_object_version(&mut inscription);
-        transfer::share_object(inscription);
-    }
-
     public(friend) fun freeze_object(inscription: Inscription) {
         assert!(inscription.version == 0, EInappropriateVersion);
         transfer::freeze_object(inscription);

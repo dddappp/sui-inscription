@@ -239,12 +239,6 @@ module sui_inscription::certificate {
         transfer::share_object(certificate);
     }
 
-    #[lint_allow(share_owned)]
-    public(friend) fun update_version_and_share_object(certificate: Certificate) {
-        update_object_version(&mut certificate);
-        transfer::share_object(certificate);
-    }
-
     public(friend) fun freeze_object(certificate: Certificate) {
         assert!(certificate.version == 0, EInappropriateVersion);
         transfer::freeze_object(certificate);

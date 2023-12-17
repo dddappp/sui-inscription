@@ -441,12 +441,6 @@ module sui_inscription::slot {
         transfer::share_object(slot);
     }
 
-    #[lint_allow(share_owned)]
-    public(friend) fun update_version_and_share_object(slot: Slot) {
-        update_object_version(&mut slot);
-        transfer::share_object(slot);
-    }
-
     public(friend) fun freeze_object(slot: Slot) {
         assert!(slot.version == 0, EInappropriateVersion);
         transfer::freeze_object(slot);
