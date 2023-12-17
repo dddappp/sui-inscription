@@ -57,12 +57,12 @@ module sui_inscription::slot_aggregate {
 
     public entry fun put_up_candidate(
         slot: &mut slot::Slot,
-        cadidate_inscription: &Inscription,
+        candidate_inscription: &Inscription,
         clock: &Clock,
         ctx: &mut tx_context::TxContext,
     ) {
         let candidate_inscription_put_up = slot_put_up_candidate_logic::verify(
-            cadidate_inscription,
+            candidate_inscription,
             clock,
             slot,
             ctx,
@@ -78,13 +78,13 @@ module sui_inscription::slot_aggregate {
 
     public entry fun advance(
         slot: &mut slot::Slot,
-        cadidate_inscription: &Inscription,
+        candidate_inscription: &Inscription,
         witness_inscription: &Inscription,
         clock: &Clock,
         ctx: &mut tx_context::TxContext,
     ) {
         let slot_advanced = slot_advance_logic::verify(
-            cadidate_inscription,
+            candidate_inscription,
             witness_inscription,
             clock,
             slot,

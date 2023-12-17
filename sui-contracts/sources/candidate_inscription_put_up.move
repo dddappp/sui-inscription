@@ -16,8 +16,8 @@ module sui_inscription::candidate_inscription_put_up {
         slot::candidate_inscription_put_up_slot_number(candidate_inscription_put_up)
     }
 
-    public fun cadidate_inscription_id(candidate_inscription_put_up: &CandidateInscriptionPutUp): ID {
-        slot::candidate_inscription_put_up_cadidate_inscription_id(candidate_inscription_put_up)
+    public fun candidate_inscription_id(candidate_inscription_put_up: &CandidateInscriptionPutUp): ID {
+        slot::candidate_inscription_put_up_candidate_inscription_id(candidate_inscription_put_up)
     }
 
 }

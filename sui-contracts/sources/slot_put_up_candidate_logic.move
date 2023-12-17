@@ -9,15 +9,15 @@ module sui_inscription::slot_put_up_candidate_logic {
     friend sui_inscription::slot_aggregate;
 
     public(friend) fun verify(
-        cadidate_inscription: &Inscription,
+        candidate_inscription: &Inscription,
         clock: &Clock,
         slot: &slot::Slot,
         ctx: &TxContext,
     ): slot::CandidateInscriptionPutUp {
-        let cadidate_inscription_id = inscription::id(cadidate_inscription);
+        let candidate_inscription_id = inscription::id(candidate_inscription);
         slot::new_candidate_inscription_put_up(
             slot,
-            cadidate_inscription_id,
+            candidate_inscription_id,
         )
     }
 
@@ -26,7 +26,7 @@ module sui_inscription::slot_put_up_candidate_logic {
         slot: &mut slot::Slot,
         ctx: &TxContext, // modify the reference to mutable if needed
     ) {
-        let cadidate_inscription_id = candidate_inscription_put_up::cadidate_inscription_id(candidate_inscription_put_up);
+        let candidate_inscription_id = candidate_inscription_put_up::candidate_inscription_id(candidate_inscription_put_up);
         let slot_number = slot::slot_number(slot);
         // ...
         //

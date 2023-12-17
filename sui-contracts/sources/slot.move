@@ -308,7 +308,7 @@ module sui_inscription::slot {
         id: object::ID,
         slot_number: u8,
         version: u64,
-        cadidate_inscription_id: ID,
+        candidate_inscription_id: ID,
     }
 
     public fun candidate_inscription_put_up_id(candidate_inscription_put_up: &CandidateInscriptionPutUp): object::ID {
@@ -319,19 +319,19 @@ module sui_inscription::slot {
         candidate_inscription_put_up.slot_number
     }
 
-    public fun candidate_inscription_put_up_cadidate_inscription_id(candidate_inscription_put_up: &CandidateInscriptionPutUp): ID {
-        candidate_inscription_put_up.cadidate_inscription_id
+    public fun candidate_inscription_put_up_candidate_inscription_id(candidate_inscription_put_up: &CandidateInscriptionPutUp): ID {
+        candidate_inscription_put_up.candidate_inscription_id
     }
 
     public(friend) fun new_candidate_inscription_put_up(
         slot: &Slot,
-        cadidate_inscription_id: ID,
+        candidate_inscription_id: ID,
     ): CandidateInscriptionPutUp {
         CandidateInscriptionPutUp {
             id: id(slot),
             slot_number: slot_number(slot),
             version: version(slot),
-            cadidate_inscription_id,
+            candidate_inscription_id,
         }
     }
 
@@ -339,7 +339,7 @@ module sui_inscription::slot {
         id: object::ID,
         slot_number: u8,
         version: u64,
-        cadidate_inscription_id: ID,
+        candidate_inscription_id: ID,
         witness_inscription_id: ID,
     }
 
@@ -351,8 +351,8 @@ module sui_inscription::slot {
         slot_advanced.slot_number
     }
 
-    public fun slot_advanced_cadidate_inscription_id(slot_advanced: &SlotAdvanced): ID {
-        slot_advanced.cadidate_inscription_id
+    public fun slot_advanced_candidate_inscription_id(slot_advanced: &SlotAdvanced): ID {
+        slot_advanced.candidate_inscription_id
     }
 
     public fun slot_advanced_witness_inscription_id(slot_advanced: &SlotAdvanced): ID {
@@ -361,14 +361,14 @@ module sui_inscription::slot {
 
     public(friend) fun new_slot_advanced(
         slot: &Slot,
-        cadidate_inscription_id: ID,
+        candidate_inscription_id: ID,
         witness_inscription_id: ID,
     ): SlotAdvanced {
         SlotAdvanced {
             id: id(slot),
             slot_number: slot_number(slot),
             version: version(slot),
-            cadidate_inscription_id,
+            candidate_inscription_id,
             witness_inscription_id,
         }
     }

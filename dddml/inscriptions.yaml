@@ -138,9 +138,9 @@ aggregates:
           name: CandidateInscriptionPutUp
           #properties:
         parameters:
-          CadidateInscription:
+          CandidateInscription:
             referenceType: Inscription
-            eventPropertyName: CadidateInscriptionId
+            eventPropertyName: CandidateInscriptionId
           Clock:
             referenceType: Clock
             isIgnoredInEvent: true
@@ -151,9 +151,9 @@ aggregates:
           name: SlotAdvanced
           #properties:
         parameters:
-          CadidateInscription:
+          CandidateInscription:
             referenceType: Inscription
-            eventPropertyName: CadidateInscriptionId
+            eventPropertyName: CandidateInscriptionId
           WitnessInscription:
             referenceType: Inscription
             eventPropertyName: WitnessInscriptionId

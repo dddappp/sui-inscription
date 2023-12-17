@@ -16,8 +16,8 @@ module sui_inscription::slot_advanced {
         slot::slot_advanced_slot_number(slot_advanced)
     }
 
-    public fun cadidate_inscription_id(slot_advanced: &SlotAdvanced): ID {
-        slot::slot_advanced_cadidate_inscription_id(slot_advanced)
+    public fun candidate_inscription_id(slot_advanced: &SlotAdvanced): ID {
+        slot::slot_advanced_candidate_inscription_id(slot_advanced)
     }
 
     public fun witness_inscription_id(slot_advanced: &SlotAdvanced): ID {
