@@ -17,7 +17,7 @@ module sui_inscription::certificate {
     const EDataTooLong: u64 = 102;
     const EInappropriateVersion: u64 = 103;
 
-    struct Certificate has key {
+    struct Certificate has key, store {
         id: UID,
         version: u64,
         inscription_object_id: ID,
@@ -222,28 +222,31 @@ module sui_inscription::certificate {
         }
     }
 
-
+    #[lint_allow(custom_state_change)]
     public(friend) fun transfer_object(certificate: Certificate, recipient: address) {
         assert!(certificate.version == 0, EInappropriateVersion);
         transfer::transfer(certificate, recipient);
     }
 
+    #[lint_allow(custom_state_change)]
     public(friend) fun update_version_and_transfer_object(certificate: Certificate, recipient: address) {
         update_object_version(&mut certificate);
         transfer::transfer(certificate, recipient);
     }
 
-    #[lint_allow(share_owned)]
+    #[lint_allow(share_owned, custom_state_change)]
     public(friend) fun share_object(certificate: Certificate) {
         assert!(certificate.version == 0, EInappropriateVersion);
         transfer::share_object(certificate);
     }
 
+    #[lint_allow(custom_state_change)]
     public(friend) fun freeze_object(certificate: Certificate) {
         assert!(certificate.version == 0, EInappropriateVersion);
         transfer::freeze_object(certificate);
     }
 
+    #[lint_allow(custom_state_change)]
     public(friend) fun update_version_and_freeze_object(certificate: Certificate) {
         update_object_version(&mut certificate);
         transfer::freeze_object(certificate);

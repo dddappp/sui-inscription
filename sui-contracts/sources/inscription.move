@@ -15,11 +15,9 @@ module sui_inscription::inscription {
 
     #[allow(unused_const)]
     const EDataTooLong: u64 = 102;
-    const EInappropriateVersion: u64 = 103;
 
     struct Inscription has key {
         id: UID,
-        version: u64,
         hash: vector<u8>,
         slot_number: u8,
         round: u64,
@@ -31,10 +29,6 @@ module sui_inscription::inscription {
 
     public fun id(inscription: &Inscription): object::ID {
         object::uid_to_inner(&inscription.id)
-    }
-
-    public fun version(inscription: &Inscription): u64 {
-        inscription.version
     }
 
     public fun hash(inscription: &Inscription): vector<u8> {
@@ -107,7 +101,6 @@ module sui_inscription::inscription {
         assert!(std::string::length(&content) <= 1000, EDataTooLong);
         Inscription {
             id: object::new(ctx),
-            version: 0,
             hash,
             slot_number,
             round,
@@ -188,40 +181,29 @@ module sui_inscription::inscription {
 
 
     public(friend) fun transfer_object(inscription: Inscription, recipient: address) {
-        assert!(inscription.version == 0, EInappropriateVersion);
         transfer::transfer(inscription, recipient);
     }
 
     public(friend) fun update_version_and_transfer_object(inscription: Inscription, recipient: address) {
-        update_object_version(&mut inscription);
         transfer::transfer(inscription, recipient);
     }
 
     #[lint_allow(share_owned)]
     public(friend) fun share_object(inscription: Inscription) {
-        assert!(inscription.version == 0, EInappropriateVersion);
         transfer::share_object(inscription);
     }
 
     public(friend) fun freeze_object(inscription: Inscription) {
-        assert!(inscription.version == 0, EInappropriateVersion);
         transfer::freeze_object(inscription);
     }
 
     public(friend) fun update_version_and_freeze_object(inscription: Inscription) {
-        update_object_version(&mut inscription);
         transfer::freeze_object(inscription);
-    }
-
-    fun update_object_version(inscription: &mut Inscription) {
-        inscription.version = inscription.version + 1;
-        //assert!(inscription.version != 0, EInappropriateVersion);
     }
 
     public(friend) fun drop_inscription(inscription: Inscription) {
         let Inscription {
             id,
-            version: _version,
             hash: _hash,
             slot_number: _slot_number,
             round: _round,
