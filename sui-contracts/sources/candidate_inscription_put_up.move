@@ -44,4 +44,8 @@ module sui_inscription::candidate_inscription_put_up {
         slot::candidate_inscription_put_up_candidate_nonce(candidate_inscription_put_up)
     }
 
+    public fun candidate_difference(candidate_inscription_put_up: &CandidateInscriptionPutUp): u64 {
+        slot::candidate_inscription_put_up_candidate_difference(candidate_inscription_put_up)
+    }
+
 }

@@ -20,7 +20,8 @@ module sui_inscription::slot_put_up_candidate_logic {
         assert!(slot::round(slot) == inscription::round(candidate_inscription), EInvalidRound);
         assert!(slot::slot_number(slot) == inscription::slot_number(candidate_inscription), EInvalidSlotNumber);
 
-        //todo
+        //todo calculate candidate_difference
+        let candidate_difference = 0;
         let candidate_inscription_id = inscription::id(candidate_inscription);
         let round = slot::round(slot);
         slot::new_candidate_inscription_put_up(
@@ -32,23 +33,24 @@ module sui_inscription::slot_put_up_candidate_logic {
             inscription::timestamp(candidate_inscription),
             inscription::amount(candidate_inscription),
             inscription::nonce(candidate_inscription),
+            candidate_difference,
         )
     }
 
     public(friend) fun mutate(
         candidate_inscription_put_up: &slot::CandidateInscriptionPutUp,
         slot: &mut slot::Slot,
-        ctx: &TxContext, // modify the reference to mutable if needed
+        _ctx: &TxContext, // modify the reference to mutable if needed
     ) {
         let candidate_inscription_id = candidate_inscription_put_up::candidate_inscription_id(candidate_inscription_put_up);
-        let slot_number = slot::slot_number(slot);
+        //let slot_number = slot::slot_number(slot);
         slot::set_candidate_inscription_id(slot, candidate_inscription_id);
         slot::set_candidate_hash(slot, candidate_inscription_put_up::candidate_hash(candidate_inscription_put_up));
         slot::set_candidate_inscriber(slot, candidate_inscription_put_up::candidate_inscriber(candidate_inscription_put_up));
         slot::set_candidate_timestamp(slot, candidate_inscription_put_up::candidate_timestamp(candidate_inscription_put_up));
         slot::set_candidate_amount(slot, candidate_inscription_put_up::candidate_amount(candidate_inscription_put_up));
         slot::set_candidate_nonce(slot, candidate_inscription_put_up::candidate_nonce(candidate_inscription_put_up));
-        //todo slot::set_candidate_difference(slot, candidate_inscription_put_up::candidate_difference(candidate_inscription_put_up));
+        slot::set_candidate_difference(slot, candidate_inscription_put_up::candidate_difference(candidate_inscription_put_up));
     }
 
 }
