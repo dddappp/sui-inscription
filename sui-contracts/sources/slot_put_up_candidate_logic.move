@@ -27,6 +27,11 @@ module sui_inscription::slot_put_up_candidate_logic {
             slot,
             candidate_inscription_id,
             round,
+            inscription::hash(candidate_inscription),
+            inscription::inscriber(candidate_inscription),
+            inscription::timestamp(candidate_inscription),
+            inscription::amount(candidate_inscription),
+            inscription::nonce(candidate_inscription),
         )
     }
 
@@ -38,12 +43,12 @@ module sui_inscription::slot_put_up_candidate_logic {
         let candidate_inscription_id = candidate_inscription_put_up::candidate_inscription_id(candidate_inscription_put_up);
         let slot_number = slot::slot_number(slot);
         slot::set_candidate_inscription_id(slot, candidate_inscription_id);
-        //slot::set_candidate_hash(slot,
-        //slot::set_candidate_inscriber(slot,
-        //slot::set_candidate_timestamp(slot,
-        //slot::set_candidate_amount(slot,
-        //slot::set_candidate_nonce(slot,
-        //todo slot::set_candidate_difference()
+        slot::set_candidate_hash(slot, candidate_inscription_put_up::candidate_hash(candidate_inscription_put_up));
+        slot::set_candidate_inscriber(slot, candidate_inscription_put_up::candidate_inscriber(candidate_inscription_put_up));
+        slot::set_candidate_timestamp(slot, candidate_inscription_put_up::candidate_timestamp(candidate_inscription_put_up));
+        slot::set_candidate_amount(slot, candidate_inscription_put_up::candidate_amount(candidate_inscription_put_up));
+        slot::set_candidate_nonce(slot, candidate_inscription_put_up::candidate_nonce(candidate_inscription_put_up));
+        //todo slot::set_candidate_difference(slot, candidate_inscription_put_up::candidate_difference(candidate_inscription_put_up));
     }
 
 }

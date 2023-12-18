@@ -289,6 +289,11 @@ module sui_inscription::slot {
         version: u64,
         candidate_inscription_id: ID,
         round: u64,
+        candidate_hash: vector<u8>,
+        candidate_inscriber: address,
+        candidate_timestamp: u64,
+        candidate_amount: u64,
+        candidate_nonce: u128,
     }
 
     public fun candidate_inscription_put_up_id(candidate_inscription_put_up: &CandidateInscriptionPutUp): object::ID {
@@ -307,10 +312,35 @@ module sui_inscription::slot {
         candidate_inscription_put_up.round
     }
 
+    public fun candidate_inscription_put_up_candidate_hash(candidate_inscription_put_up: &CandidateInscriptionPutUp): vector<u8> {
+        candidate_inscription_put_up.candidate_hash
+    }
+
+    public fun candidate_inscription_put_up_candidate_inscriber(candidate_inscription_put_up: &CandidateInscriptionPutUp): address {
+        candidate_inscription_put_up.candidate_inscriber
+    }
+
+    public fun candidate_inscription_put_up_candidate_timestamp(candidate_inscription_put_up: &CandidateInscriptionPutUp): u64 {
+        candidate_inscription_put_up.candidate_timestamp
+    }
+
+    public fun candidate_inscription_put_up_candidate_amount(candidate_inscription_put_up: &CandidateInscriptionPutUp): u64 {
+        candidate_inscription_put_up.candidate_amount
+    }
+
+    public fun candidate_inscription_put_up_candidate_nonce(candidate_inscription_put_up: &CandidateInscriptionPutUp): u128 {
+        candidate_inscription_put_up.candidate_nonce
+    }
+
     public(friend) fun new_candidate_inscription_put_up(
         slot: &Slot,
         candidate_inscription_id: ID,
         round: u64,
+        candidate_hash: vector<u8>,
+        candidate_inscriber: address,
+        candidate_timestamp: u64,
+        candidate_amount: u64,
+        candidate_nonce: u128,
     ): CandidateInscriptionPutUp {
         CandidateInscriptionPutUp {
             id: id(slot),
@@ -318,6 +348,11 @@ module sui_inscription::slot {
             version: version(slot),
             candidate_inscription_id,
             round,
+            candidate_hash,
+            candidate_inscriber,
+            candidate_timestamp,
+            candidate_amount,
+            candidate_nonce,
         }
     }
 
