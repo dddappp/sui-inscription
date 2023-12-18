@@ -5,6 +5,7 @@
 
 module sui_inscription::certificate {
     use std::option;
+    use std::string::String;
     use sui::event;
     use sui::object::{Self, ID, UID};
     use sui::transfer;
@@ -25,6 +26,7 @@ module sui_inscription::certificate {
         inscription_timestamp: u64,
         amount: u64,
         inscription_nonce: u128,
+        inscription_content: String,
     }
 
     public fun id(certificate: &Certificate): object::ID {
@@ -95,6 +97,15 @@ module sui_inscription::certificate {
         certificate.inscription_nonce = inscription_nonce;
     }
 
+    public fun inscription_content(certificate: &Certificate): String {
+        certificate.inscription_content
+    }
+
+    public(friend) fun set_inscription_content(certificate: &mut Certificate, inscription_content: String) {
+        assert!(std::string::length(&inscription_content) <= 1000, EDataTooLong);
+        certificate.inscription_content = inscription_content;
+    }
+
     public(friend) fun new_certificate(
         inscription_id: ID,
         inscription_hash: vector<u8>,
@@ -104,8 +115,10 @@ module sui_inscription::certificate {
         inscription_timestamp: u64,
         amount: u64,
         inscription_nonce: u128,
+        inscription_content: String,
         ctx: &mut TxContext,
     ): Certificate {
+        assert!(std::string::length(&inscription_content) <= 1000, EDataTooLong);
         Certificate {
             id: object::new(ctx),
             inscription_id,
@@ -116,6 +129,7 @@ module sui_inscription::certificate {
             inscription_timestamp,
             amount,
             inscription_nonce,
+            inscription_content,
         }
     }
 
@@ -129,6 +143,7 @@ module sui_inscription::certificate {
         inscription_timestamp: u64,
         amount: u64,
         inscription_nonce: u128,
+        inscription_content: String,
     }
 
     public fun certificate_issued_id(certificate_issued: &CertificateIssued): option::Option<object::ID> {
@@ -171,6 +186,10 @@ module sui_inscription::certificate {
         certificate_issued.inscription_nonce
     }
 
+    public fun certificate_issued_inscription_content(certificate_issued: &CertificateIssued): String {
+        certificate_issued.inscription_content
+    }
+
     public(friend) fun new_certificate_issued(
         inscription_id: ID,
         inscription_hash: vector<u8>,
@@ -180,6 +199,7 @@ module sui_inscription::certificate {
         inscription_timestamp: u64,
         amount: u64,
         inscription_nonce: u128,
+        inscription_content: String,
     ): CertificateIssued {
         CertificateIssued {
             id: option::none(),
@@ -191,6 +211,7 @@ module sui_inscription::certificate {
             inscription_timestamp,
             amount,
             inscription_nonce,
+            inscription_content,
         }
     }
 
@@ -221,6 +242,7 @@ module sui_inscription::certificate {
             inscription_timestamp: _inscription_timestamp,
             amount: _amount,
             inscription_nonce: _inscription_nonce,
+            inscription_content: _inscription_content,
         } = certificate;
         object::delete(id);
     }

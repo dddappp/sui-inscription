@@ -53,6 +53,7 @@ module sui_inscription::slot_advance_logic {
             inscription_timestamp,
             amount,
             inscription_nonce,
+            slot::candidate_content(slot),
             _ctx,
         );
         // update amount

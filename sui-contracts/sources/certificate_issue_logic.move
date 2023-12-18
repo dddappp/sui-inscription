@@ -1,5 +1,5 @@
-#[allow(unused_variable, unused_use, unused_assignment, unused_mut_parameter)]
 module sui_inscription::certificate_issue_logic {
+    use std::string::String;
     use sui::object::ID;
     use sui::tx_context::TxContext;
     use sui_inscription::certificate;
@@ -16,7 +16,8 @@ module sui_inscription::certificate_issue_logic {
         inscription_timestamp: u64,
         amount: u64,
         inscription_nonce: u128,
-        ctx: &mut TxContext,
+        inscription_content: String,
+        ctx: &TxContext,//&mut TxContext,
     ): certificate::CertificateIssued {
         let _ = ctx;
         certificate::new_certificate_issued(
@@ -28,6 +29,7 @@ module sui_inscription::certificate_issue_logic {
             inscription_timestamp,
             amount,
             inscription_nonce,
+            inscription_content,
         )
     }
 
@@ -43,6 +45,7 @@ module sui_inscription::certificate_issue_logic {
         let inscription_timestamp = certificate_issued::inscription_timestamp(certificate_issued);
         let amount = certificate_issued::amount(certificate_issued);
         let inscription_nonce = certificate_issued::inscription_nonce(certificate_issued);
+        let inscription_content = certificate_issued::inscription_content(certificate_issued);
         certificate::new_certificate(
             inscription_id,
             inscription_hash,
@@ -52,6 +55,7 @@ module sui_inscription::certificate_issue_logic {
             inscription_timestamp,
             amount,
             inscription_nonce,
+            inscription_content,
             ctx,
         )
     }

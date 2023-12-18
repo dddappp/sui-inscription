@@ -1,6 +1,7 @@
 #[allow(unused_variable, unused_use, unused_assignment, unused_mut_parameter)]
 module sui_inscription::slot_create_logic {
     use std::vector;
+    use std::string;
 
     use sui::clock::{Self, Clock};
     use sui::tx_context::TxContext;
@@ -58,6 +59,7 @@ module sui_inscription::slot_create_logic {
             0,
             0,
             256 * MAJOR_DIFFERENCE_SCALE_FACTOR,
+            string::utf8(b""),
             slot_number_table,
             ctx,
         )

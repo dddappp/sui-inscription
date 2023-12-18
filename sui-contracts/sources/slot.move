@@ -5,6 +5,7 @@
 
 module sui_inscription::slot {
     use std::option;
+    use std::string::String;
     use sui::event;
     use sui::object::{Self, ID, UID};
     use sui::table;
@@ -61,6 +62,7 @@ module sui_inscription::slot {
         candidate_amount: u64,
         candidate_nonce: u128,
         candidate_difference: u64,
+        candidate_content: String,
     }
 
     public fun id(slot: &Slot): object::ID {
@@ -203,6 +205,15 @@ module sui_inscription::slot {
         slot.candidate_difference = candidate_difference;
     }
 
+    public fun candidate_content(slot: &Slot): String {
+        slot.candidate_content
+    }
+
+    public(friend) fun set_candidate_content(slot: &mut Slot, candidate_content: String) {
+        assert!(std::string::length(&candidate_content) <= 1000, EDataTooLong);
+        slot.candidate_content = candidate_content;
+    }
+
     fun new_slot(
         slot_number: u8,
         genesis_timestamp: u64,
@@ -218,8 +229,10 @@ module sui_inscription::slot {
         candidate_amount: u64,
         candidate_nonce: u128,
         candidate_difference: u64,
+        candidate_content: String,
         ctx: &mut TxContext,
     ): Slot {
+        assert!(std::string::length(&candidate_content) <= 1000, EDataTooLong);
         Slot {
             id: object::new(ctx),
             slot_number,
@@ -240,6 +253,7 @@ module sui_inscription::slot {
             candidate_amount,
             candidate_nonce,
             candidate_difference,
+            candidate_content,
         }
     }
 
@@ -410,6 +424,7 @@ module sui_inscription::slot {
         candidate_amount: u64,
         candidate_nonce: u128,
         candidate_difference: u64,
+        candidate_content: String,
         slot_number_table: &mut SlotNumberTable,
         ctx: &mut TxContext,
     ): Slot {
@@ -428,6 +443,7 @@ module sui_inscription::slot {
             candidate_amount,
             candidate_nonce,
             candidate_difference,
+            candidate_content,
             ctx,
         );
         asset_slot_number_not_exists_then_add(slot_number, slot_number_table, object::uid_to_inner(&slot.id));
@@ -502,6 +518,7 @@ module sui_inscription::slot {
             candidate_amount: _candidate_amount,
             candidate_nonce: _candidate_nonce,
             candidate_difference: _candidate_difference,
+            candidate_content: _candidate_content,
         } = slot;
         object::delete(id);
     }

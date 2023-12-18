@@ -6,6 +6,7 @@
 module sui_inscription::certificate_issued {
 
     use std::option;
+    use std::string::String;
     use sui::object::{Self, ID};
     use sui_inscription::certificate::{Self, CertificateIssued};
 
@@ -43,6 +44,10 @@ module sui_inscription::certificate_issued {
 
     public fun inscription_nonce(certificate_issued: &CertificateIssued): u128 {
         certificate::certificate_issued_inscription_nonce(certificate_issued)
+    }
+
+    public fun inscription_content(certificate_issued: &CertificateIssued): String {
+        certificate::certificate_issued_inscription_content(certificate_issued)
     }
 
 }

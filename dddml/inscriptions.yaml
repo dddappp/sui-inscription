@@ -90,9 +90,9 @@ aggregates:
         type: u64
       InscriptionNonce:
         type: u128
-      #InscriptionContent:
-      #  type: String
-      #  length: 1000
+      InscriptionContent:
+        type: String
+        length: 1000
       #CertificateType:
       #  type: u8
       #  #type: CertificateType
@@ -171,6 +171,9 @@ aggregates:
       CandidateDifference:
         type: u64
         description: candidate difference.
+      CandidateContent:
+        type: String
+        length: 1000
     methods:
       Create:
         isCreationCommand: true
