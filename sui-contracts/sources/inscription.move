@@ -184,20 +184,12 @@ module sui_inscription::inscription {
         transfer::transfer(inscription, recipient);
     }
 
-    public(friend) fun update_version_and_transfer_object(inscription: Inscription, recipient: address) {
-        transfer::transfer(inscription, recipient);
-    }
-
     #[lint_allow(share_owned)]
     public(friend) fun share_object(inscription: Inscription) {
         transfer::share_object(inscription);
     }
 
     public(friend) fun freeze_object(inscription: Inscription) {
-        transfer::freeze_object(inscription);
-    }
-
-    public(friend) fun update_version_and_freeze_object(inscription: Inscription) {
         transfer::freeze_object(inscription);
     }
 

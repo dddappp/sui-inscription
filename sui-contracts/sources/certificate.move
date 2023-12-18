@@ -222,6 +222,7 @@ module sui_inscription::certificate {
         }
     }
 
+
     #[lint_allow(custom_state_change)]
     public(friend) fun transfer_object(certificate: Certificate, recipient: address) {
         assert!(certificate.version == 0, EInappropriateVersion);

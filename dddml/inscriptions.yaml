@@ -6,6 +6,7 @@ aggregates:
       CRUD_IT_NO_DELETE: true
       CRUD_IT_NO_UPDATE: true
       CRUD_IT_CREATE_METHOD_NAME: Mint
+      MOVE_NO_VERSION_PROPERTY: true
     id:
       name: Id
       type: UID
@@ -34,6 +35,7 @@ aggregates:
 
   Certificate:
     metadata:
+      HasStoreAbility: true
       Preprocessors:
         - MOVE_CRUD_IT
       CRUD_IT_NO_DELETE: true
