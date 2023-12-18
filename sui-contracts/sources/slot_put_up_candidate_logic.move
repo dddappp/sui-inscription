@@ -40,7 +40,7 @@ module sui_inscription::slot_put_up_candidate_logic {
         let genesis_timestamp = slot::genesis_timestamp(slot);
         let current_timestamp = clock::timestamp_ms(clock);
 
-        let qualified_difference = 256 * MAJOR_DIFFERENCE_SCALE_FACTOR;
+        let qualified_difference = slot::qualified_difference(slot);
         let qualified_hash = slot::qualified_hash(slot);
         let qualified_timestamp = slot::qualified_timestamp(slot);
         if (round == 0
@@ -48,15 +48,17 @@ module sui_inscription::slot_put_up_candidate_logic {
             || slot::qualified_hash(slot) == vector::empty()
             || slot::qualified_timestamp(slot) == 0
         ) {
+            //fix for the first round
+            qualified_difference = 256 * MAJOR_DIFFERENCE_SCALE_FACTOR;
             qualified_hash = id_util::hash_placeholder();
             qualified_timestamp = genesis_timestamp + time_util::round_duration_ms() / 2;
         };
-
         let qualified_elapsed_time = time_util::elapsed_time_after_round(
             genesis_timestamp,
             qualified_timestamp,
             slot::qualified_round(slot)
         );
+
         let candidate_hash = inscription::hash(candidate_inscription);
         let candidte_timestamp = inscription::timestamp(candidate_inscription);
         let candidate_elapsed_time = time_util::elapsed_time_after_round(
@@ -64,10 +66,11 @@ module sui_inscription::slot_put_up_candidate_logic {
             candidte_timestamp,
             round
         );
-        let time_diff = if (candidate_elapsed_time > qualified_elapsed_time) { candidate_elapsed_time - qualified_elapsed_time } else { qualified_elapsed_time - candidate_elapsed_time };
-        if (time_diff > time_util::round_duration_ms()) {
+        let elapsed_time_diff = if (candidate_elapsed_time > qualified_elapsed_time) { candidate_elapsed_time - qualified_elapsed_time } else { qualified_elapsed_time - candidate_elapsed_time };
+        if (elapsed_time_diff > time_util::round_duration_ms()) {
             candidate_elapsed_time = candidate_elapsed_time + time_util::round_duration_ms();
         };
+
         let candidate_difference = diff::calculate_difference(
             qualified_hash,
             candidate_hash,
