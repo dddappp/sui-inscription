@@ -55,6 +55,9 @@ module sui_inscription::slot_advance_logic {
             inscription_nonce,
             _ctx,
         );
+        // update amount
+        let minted_amount = slot::minted_amount(slot);
+        slot::set_minted_amount(slot, minted_amount + amount);
 
         slot::set_qualified_round(slot, qualified_round);
         slot::set_qualified_inscription_id(slot, inscription_id);
@@ -64,7 +67,6 @@ module sui_inscription::slot_advance_logic {
         slot::set_qualified_difference(slot, candidate_difference);
 
         slot::set_candidate_inscription_id(slot, id_util::id_placeholder());
-
         slot::set_round(slot, qualified_round + 1);
     }
 }
