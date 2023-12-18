@@ -1,7 +1,12 @@
 #[allow(unused_variable, unused_use, unused_assignment, unused_mut_parameter)]
 module sui_inscription::slot_put_up_candidate_logic {
+    use std::vector;
+    use sui::clock;
     use sui::clock::Clock;
     use sui::tx_context::{Self, TxContext};
+    use sui_inscription::diff;
+    use sui_inscription::time_util;
+    use sui_inscription::id_util;
     use sui_inscription::inscription::{Self, Inscription};
     use sui_inscription::candidate_inscription_put_up;
     use sui_inscription::slot;
@@ -11,6 +16,9 @@ module sui_inscription::slot_put_up_candidate_logic {
     const EInvalidRound: u64 = 100;
     const EInvalidSlotNumber: u64 = 101;
 
+    const MAJOR_DIFFERENCE_SCALE_FACTOR: u64 = 1_000_000;
+    const TEN_MINUTES_IN_MILLISECONDS: u64 = 600000;
+
     public(friend) fun verify(
         candidate_inscription: &Inscription,
         clock: &Clock,
@@ -19,11 +27,37 @@ module sui_inscription::slot_put_up_candidate_logic {
     ): slot::CandidateInscriptionPutUp {
         assert!(slot::round(slot) == inscription::round(candidate_inscription), EInvalidRound);
         assert!(slot::slot_number(slot) == inscription::slot_number(candidate_inscription), EInvalidSlotNumber);
-
-        //todo calculate candidate_difference
-        let candidate_difference = 0;
-        let candidate_inscription_id = inscription::id(candidate_inscription);
         let round = slot::round(slot);
+        let genesis_timestamp = slot::genesis_timestamp(slot);
+        let current_timestamp = clock::timestamp_ms(clock);
+
+        let qualified_difference = slot::qualified_difference(slot);
+        let candidate_difference = 256 * MAJOR_DIFFERENCE_SCALE_FACTOR;
+        if (round == 0
+            || slot::qualified_inscription_id(slot) == id_util::id_placeholder()
+            || slot::qualified_hash(slot) == vector::empty()
+            || slot::qualified_timestamp(slot) == 0
+        ) {
+            // allow any inscription
+        } else {
+            let qualified_hash = slot::qualified_hash(slot);
+            let qualified_timestamp = slot::qualified_timestamp(slot);
+            let qualified_elapsed_time = time_util::elapsed_time_after_round(genesis_timestamp, qualified_timestamp, slot::qualified_round(slot));
+            let candidate_hash = inscription::hash(candidate_inscription);
+            let candidte_timestamp = inscription::timestamp(candidate_inscription);
+            let candidate_elapsed_time = time_util::elapsed_time_after_round(genesis_timestamp, candidte_timestamp, round);
+            let time_diff = if (candidate_elapsed_time > qualified_elapsed_time) { candidate_elapsed_time - qualified_elapsed_time } else { qualified_elapsed_time - candidate_elapsed_time };
+            if (time_diff > TEN_MINUTES_IN_MILLISECONDS) {
+                candidate_elapsed_time = candidate_elapsed_time + TEN_MINUTES_IN_MILLISECONDS;
+            };
+            candidate_difference = diff::calculate_difference(qualified_hash, candidate_hash, qualified_elapsed_time, candidate_elapsed_time);
+        };
+
+        let due_rounds = time_util::count_rounds(genesis_timestamp, current_timestamp);
+        let idle_rounds = due_rounds - round;
+
+
+        let candidate_inscription_id = inscription::id(candidate_inscription);
         slot::new_candidate_inscription_put_up(
             slot,
             candidate_inscription_id,
