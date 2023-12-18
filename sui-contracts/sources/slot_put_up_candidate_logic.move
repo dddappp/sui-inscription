@@ -27,7 +27,7 @@ module sui_inscription::slot_put_up_candidate_logic {
         candidate_inscription: &Inscription,
         clock: &Clock,
         slot: &slot::Slot,
-        ctx: &TxContext,
+        _ctx: &TxContext,
     ): slot::CandidateInscriptionPutUp {
         assert!(slot::round(slot) == inscription::round(candidate_inscription), EInvalidRound);
         assert!(slot::slot_number(slot) == inscription::slot_number(candidate_inscription), EInvalidSlotNumber);
@@ -40,41 +40,40 @@ module sui_inscription::slot_put_up_candidate_logic {
         let genesis_timestamp = slot::genesis_timestamp(slot);
         let current_timestamp = clock::timestamp_ms(clock);
 
-        let qualified_difference = slot::qualified_difference(slot);
-        let candidate_difference = 256 * MAJOR_DIFFERENCE_SCALE_FACTOR;
+        let qualified_difference = 256 * MAJOR_DIFFERENCE_SCALE_FACTOR;
+        let qualified_hash = slot::qualified_hash(slot);
+        let qualified_timestamp = slot::qualified_timestamp(slot);
         if (round == 0
             || slot::qualified_inscription_id(slot) == id_util::id_placeholder()
             || slot::qualified_hash(slot) == vector::empty()
             || slot::qualified_timestamp(slot) == 0
         ) {
-            // allow any inscription
-            qualified_difference = 256 * MAJOR_DIFFERENCE_SCALE_FACTOR;
-        } else {
-            let qualified_hash = slot::qualified_hash(slot);
-            let qualified_timestamp = slot::qualified_timestamp(slot);
-            let qualified_elapsed_time = time_util::elapsed_time_after_round(
-                genesis_timestamp,
-                qualified_timestamp,
-                slot::qualified_round(slot)
-            );
-            let candidate_hash = inscription::hash(candidate_inscription);
-            let candidte_timestamp = inscription::timestamp(candidate_inscription);
-            let candidate_elapsed_time = time_util::elapsed_time_after_round(
-                genesis_timestamp,
-                candidte_timestamp,
-                round
-            );
-            let time_diff = if (candidate_elapsed_time > qualified_elapsed_time) { candidate_elapsed_time - qualified_elapsed_time } else { qualified_elapsed_time - candidate_elapsed_time };
-            if (time_diff > time_util::round_duration_ms()) {
-                candidate_elapsed_time = candidate_elapsed_time + time_util::round_duration_ms();
-            };
-            candidate_difference = diff::calculate_difference(
-                qualified_hash,
-                candidate_hash,
-                qualified_elapsed_time,
-                candidate_elapsed_time
-            );
+            qualified_hash = id_util::hash_placeholder();
+            qualified_timestamp = genesis_timestamp + time_util::round_duration_ms() / 2;
         };
+
+        let qualified_elapsed_time = time_util::elapsed_time_after_round(
+            genesis_timestamp,
+            qualified_timestamp,
+            slot::qualified_round(slot)
+        );
+        let candidate_hash = inscription::hash(candidate_inscription);
+        let candidte_timestamp = inscription::timestamp(candidate_inscription);
+        let candidate_elapsed_time = time_util::elapsed_time_after_round(
+            genesis_timestamp,
+            candidte_timestamp,
+            round
+        );
+        let time_diff = if (candidate_elapsed_time > qualified_elapsed_time) { candidate_elapsed_time - qualified_elapsed_time } else { qualified_elapsed_time - candidate_elapsed_time };
+        if (time_diff > time_util::round_duration_ms()) {
+            candidate_elapsed_time = candidate_elapsed_time + time_util::round_duration_ms();
+        };
+        let candidate_difference = diff::calculate_difference(
+            qualified_hash,
+            candidate_hash,
+            qualified_elapsed_time,
+            candidate_elapsed_time
+        );
 
         let due_rounds = time_util::count_rounds(genesis_timestamp, current_timestamp);
         let idle_rounds = if (due_rounds > round) { due_rounds - round } else { 0 };
@@ -130,6 +129,9 @@ module sui_inscription::slot_put_up_candidate_logic {
             slot,
             candidate_inscription_put_up::candidate_difference(candidate_inscription_put_up)
         );
-        slot::set_candidate_content(slot, candidate_inscription_put_up::candidate_content(candidate_inscription_put_up));
+        slot::set_candidate_content(
+            slot,
+            candidate_inscription_put_up::candidate_content(candidate_inscription_put_up)
+        );
     }
 }
