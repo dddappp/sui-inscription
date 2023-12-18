@@ -15,20 +15,27 @@ module sui_inscription::inscription {
 
     #[allow(unused_const)]
     const EDataTooLong: u64 = 102;
+    const EInappropriateVersion: u64 = 103;
 
-    struct Inscription has key {
+    struct Inscription has key, store {
         id: UID,
+        version: u64,
         hash: vector<u8>,
         slot_number: u8,
         round: u64,
         inscriber: address,
         timestamp: u64,
         amount: u64,
+        nonce: u128,
         content: String,
     }
 
     public fun id(inscription: &Inscription): object::ID {
         object::uid_to_inner(&inscription.id)
+    }
+
+    public fun version(inscription: &Inscription): u64 {
+        inscription.version
     }
 
     public fun hash(inscription: &Inscription): vector<u8> {
@@ -79,6 +86,14 @@ module sui_inscription::inscription {
         inscription.amount = amount;
     }
 
+    public fun nonce(inscription: &Inscription): u128 {
+        inscription.nonce
+    }
+
+    public(friend) fun set_nonce(inscription: &mut Inscription, nonce: u128) {
+        inscription.nonce = nonce;
+    }
+
     public fun content(inscription: &Inscription): String {
         inscription.content
     }
@@ -95,31 +110,35 @@ module sui_inscription::inscription {
         inscriber: address,
         timestamp: u64,
         amount: u64,
+        nonce: u128,
         content: String,
         ctx: &mut TxContext,
     ): Inscription {
         assert!(std::string::length(&content) <= 1000, EDataTooLong);
         Inscription {
             id: object::new(ctx),
+            version: 0,
             hash,
             slot_number,
             round,
             inscriber,
             timestamp,
             amount,
+            nonce,
             content,
         }
     }
 
     struct InscriptionMinted has copy, drop {
         id: option::Option<object::ID>,
-        hash: vector<u8>,
         slot_number: u8,
         round: u64,
+        amount: u64,
+        nonce: u128,
+        content: String,
         inscriber: address,
         timestamp: u64,
-        amount: u64,
-        content: String,
+        hash: vector<u8>,
     }
 
     public fun inscription_minted_id(inscription_minted: &InscriptionMinted): option::Option<object::ID> {
@@ -130,16 +149,24 @@ module sui_inscription::inscription {
         inscription_minted.id = option::some(id);
     }
 
-    public fun inscription_minted_hash(inscription_minted: &InscriptionMinted): vector<u8> {
-        inscription_minted.hash
-    }
-
     public fun inscription_minted_slot_number(inscription_minted: &InscriptionMinted): u8 {
         inscription_minted.slot_number
     }
 
     public fun inscription_minted_round(inscription_minted: &InscriptionMinted): u64 {
         inscription_minted.round
+    }
+
+    public fun inscription_minted_amount(inscription_minted: &InscriptionMinted): u64 {
+        inscription_minted.amount
+    }
+
+    public fun inscription_minted_nonce(inscription_minted: &InscriptionMinted): u128 {
+        inscription_minted.nonce
+    }
+
+    public fun inscription_minted_content(inscription_minted: &InscriptionMinted): String {
+        inscription_minted.content
     }
 
     public fun inscription_minted_inscriber(inscription_minted: &InscriptionMinted): address {
@@ -150,58 +177,80 @@ module sui_inscription::inscription {
         inscription_minted.timestamp
     }
 
-    public fun inscription_minted_amount(inscription_minted: &InscriptionMinted): u64 {
-        inscription_minted.amount
-    }
-
-    public fun inscription_minted_content(inscription_minted: &InscriptionMinted): String {
-        inscription_minted.content
+    public fun inscription_minted_hash(inscription_minted: &InscriptionMinted): vector<u8> {
+        inscription_minted.hash
     }
 
     public(friend) fun new_inscription_minted(
-        hash: vector<u8>,
         slot_number: u8,
         round: u64,
+        amount: u64,
+        nonce: u128,
+        content: String,
         inscriber: address,
         timestamp: u64,
-        amount: u64,
-        content: String,
+        hash: vector<u8>,
     ): InscriptionMinted {
         InscriptionMinted {
             id: option::none(),
-            hash,
             slot_number,
             round,
+            amount,
+            nonce,
+            content,
             inscriber,
             timestamp,
-            amount,
-            content,
+            hash,
         }
     }
 
 
+    #[lint_allow(custom_state_change)]
     public(friend) fun transfer_object(inscription: Inscription, recipient: address) {
+        assert!(inscription.version == 0, EInappropriateVersion);
         transfer::transfer(inscription, recipient);
     }
 
-    #[lint_allow(share_owned)]
+    #[lint_allow(custom_state_change)]
+    public(friend) fun update_version_and_transfer_object(inscription: Inscription, recipient: address) {
+        update_object_version(&mut inscription);
+        transfer::transfer(inscription, recipient);
+    }
+
+    #[lint_allow(share_owned, custom_state_change)]
     public(friend) fun share_object(inscription: Inscription) {
+        assert!(inscription.version == 0, EInappropriateVersion);
         transfer::share_object(inscription);
     }
 
+    #[lint_allow(custom_state_change)]
     public(friend) fun freeze_object(inscription: Inscription) {
+        assert!(inscription.version == 0, EInappropriateVersion);
         transfer::freeze_object(inscription);
+    }
+
+    #[lint_allow(custom_state_change)]
+    public(friend) fun update_version_and_freeze_object(inscription: Inscription) {
+        update_object_version(&mut inscription);
+        transfer::freeze_object(inscription);
+    }
+
+    fun update_object_version(inscription: &mut Inscription) {
+        inscription.version = inscription.version + 1;
+        //assert!(inscription.version != 0, EInappropriateVersion);
     }
 
     public(friend) fun drop_inscription(inscription: Inscription) {
         let Inscription {
             id,
+            version: _version,
             hash: _hash,
             slot_number: _slot_number,
             round: _round,
             inscriber: _inscriber,
             timestamp: _timestamp,
             amount: _amount,
+            nonce: _nonce,
             content: _content,
         } = inscription;
         object::delete(id);

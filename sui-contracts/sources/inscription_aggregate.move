@@ -5,28 +5,27 @@
 
 module sui_inscription::inscription_aggregate {
     use std::string::String;
+    use sui::clock::Clock;
     use sui::tx_context;
     use sui_inscription::inscription;
     use sui_inscription::inscription_mint_logic;
 
     public entry fun mint(
-        hash: vector<u8>,
         slot_number: u8,
         round: u64,
-        inscriber: address,
-        timestamp: u64,
         amount: u64,
+        nonce: u128,
         content: String,
+        clock: &Clock,
         ctx: &mut tx_context::TxContext,
     ) {
         let inscription_minted = inscription_mint_logic::verify(
-            hash,
             slot_number,
             round,
-            inscriber,
-            timestamp,
             amount,
+            nonce,
             content,
+            clock,
             ctx,
         );
         let inscription = inscription_mint_logic::mutate(
@@ -34,7 +33,7 @@ module sui_inscription::inscription_aggregate {
             ctx,
         );
         inscription::set_inscription_minted_id(&mut inscription_minted, inscription::id(&inscription));
-        inscription::share_object(inscription);
+        inscription::transfer_object(inscription, tx_context::sender(ctx));
         inscription::emit_inscription_minted(inscription_minted);
     }
 

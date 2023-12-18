@@ -5,7 +5,6 @@
 
 module sui_inscription::slot_aggregate {
     use sui::clock::Clock;
-    use sui::object::ID;
     use sui::tx_context;
     use sui_inscription::inscription::Inscription;
     use sui_inscription::slot;
@@ -15,33 +14,13 @@ module sui_inscription::slot_aggregate {
 
     public entry fun create(
         slot_number: u8,
-        genesis_timestamp: u64,
-        minted_amount: u64,
-        qualified_round: u64,
-        qualified_inscription_id: ID,
-        qualified_hash: vector<u8>,
-        qualified_timestamp: u64,
-        qualified_difference: u64,
-        candidate_inscription_id: ID,
-        candidate_hash: vector<u8>,
-        candidate_timestamp: u64,
-        candidate_difference: u64,
+        clock: &Clock,
         slot_number_table: &mut slot::SlotNumberTable,
         ctx: &mut tx_context::TxContext,
     ) {
         let slot_created = slot_create_logic::verify(
             slot_number,
-            genesis_timestamp,
-            minted_amount,
-            qualified_round,
-            qualified_inscription_id,
-            qualified_hash,
-            qualified_timestamp,
-            qualified_difference,
-            candidate_inscription_id,
-            candidate_hash,
-            candidate_timestamp,
-            candidate_difference,
+            clock,
             slot_number_table,
             ctx,
         );
@@ -78,14 +57,10 @@ module sui_inscription::slot_aggregate {
 
     public entry fun advance(
         slot: &mut slot::Slot,
-        candidate_inscription: &Inscription,
-        witness_inscription: &Inscription,
         clock: &Clock,
         ctx: &mut tx_context::TxContext,
     ) {
         let slot_advanced = slot_advance_logic::verify(
-            candidate_inscription,
-            witness_inscription,
             clock,
             slot,
             ctx,

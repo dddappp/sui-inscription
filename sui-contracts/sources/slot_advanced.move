@@ -5,7 +5,7 @@
 
 module sui_inscription::slot_advanced {
 
-    use sui::object::{Self, ID};
+    use sui::object;
     use sui_inscription::slot::{Self, SlotAdvanced};
 
     public fun id(slot_advanced: &SlotAdvanced): object::ID {
@@ -16,12 +16,8 @@ module sui_inscription::slot_advanced {
         slot::slot_advanced_slot_number(slot_advanced)
     }
 
-    public fun candidate_inscription_id(slot_advanced: &SlotAdvanced): ID {
-        slot::slot_advanced_candidate_inscription_id(slot_advanced)
-    }
-
-    public fun witness_inscription_id(slot_advanced: &SlotAdvanced): ID {
-        slot::slot_advanced_witness_inscription_id(slot_advanced)
+    public fun round(slot_advanced: &SlotAdvanced): u64 {
+        slot::slot_advanced_round(slot_advanced)
     }
 
 }

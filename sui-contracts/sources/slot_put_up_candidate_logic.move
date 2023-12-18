@@ -15,9 +15,11 @@ module sui_inscription::slot_put_up_candidate_logic {
         ctx: &TxContext,
     ): slot::CandidateInscriptionPutUp {
         let candidate_inscription_id = inscription::id(candidate_inscription);
+        let round = slot::round(slot);
         slot::new_candidate_inscription_put_up(
             slot,
             candidate_inscription_id,
+            round,
         )
     }
 

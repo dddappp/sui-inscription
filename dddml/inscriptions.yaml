@@ -1,12 +1,13 @@
 aggregates:
   Inscription:
     metadata:
-      Preprocessors:
-        - MOVE_CRUD_IT
-      CRUD_IT_NO_DELETE: true
-      CRUD_IT_NO_UPDATE: true
-      CRUD_IT_CREATE_METHOD_NAME: Mint
-      MOVE_NO_VERSION_PROPERTY: true
+      HasStoreAbility: true
+      #Preprocessors:
+      #  - MOVE_CRUD_IT
+      #CRUD_IT_NO_DELETE: true
+      #CRUD_IT_NO_UPDATE: true
+      #CRUD_IT_CREATE_METHOD_NAME: Mint
+      #MOVE_NO_VERSION_PROPERTY: true
     id:
       name: Id
       type: UID
@@ -23,15 +24,40 @@ aggregates:
         type: u64
       Amount:
         type: u64
+      Nonce:
+        type: u128
       Content:
         type: String
         length: 1000
     methods:
       Mint:
+        isCreationCommand: true
+        parameters:
+          SlotNumber:
+            type: u8
+          Round:
+            type: u64
+          Amount:
+            type: u64
+          Nonce:
+            type: u128
+          Content:
+            type: String
+            length: 1000
+          Clock:
+            referenceType: Clock
+            isIgnoredInEvent: true
         event:
           name: InscriptionMinted
-          isObjectShared: true
+          #isObjectShared: true
           #isObjectFrozen: true
+          properties:
+            Inscriber:
+              type: address
+            Timestamp:
+              type: u64
+            Hash:
+              type: vector<u8>
 
   Certificate:
     metadata:
@@ -41,13 +67,14 @@ aggregates:
       CRUD_IT_NO_DELETE: true
       CRUD_IT_NO_UPDATE: true
       CRUD_IT_CREATE_METHOD_NAME: Issue
+      MOVE_NO_VERSION_PROPERTY: true
     friends:
       - Slot.Advance
     id:
       name: Id
       type: UID
     properties:
-      InscriptionObjectId:
+      InscriptionId:
         type: ID
       InscriptionHash:
         type: vector<u8>
@@ -61,29 +88,31 @@ aggregates:
         type: u64
       Amount:
         type: u64
-      InscriptionContent:
-        type: String
-        length: 1000
-      CertificateType:
-        type: u8
-        #type: CertificateType
+      InscriptionNonce:
+        type: u128
+      #InscriptionContent:
+      #  type: String
+      #  length: 1000
+      #CertificateType:
+      #  type: u8
+      #  #type: CertificateType
     methods:
       Issue:
         event:
           name: CertificateIssued
           #isObjectShared: true
-          isObjectFrozen: true
+          #isObjectFrozen: true
           properties:
             Inscriber:
-              #type: address
               isOwner: true # Transfer the object to the account address indicated by this property
+              #type: address
 
   Slot:
     metadata:
-      Preprocessors:
-        - MOVE_CRUD_IT
-      CRUD_IT_NO_DELETE: true
-      CRUD_IT_NO_UPDATE: true
+      #Preprocessors:
+      #  - MOVE_CRUD_IT
+      #CRUD_IT_NO_DELETE: true
+      #CRUD_IT_NO_UPDATE: true
       #CRUD_IT_CREATE_METHOD_NAME: Create
     id:
       name: SlotNumber
@@ -94,8 +123,13 @@ aggregates:
     properties:
       GenesisTimestamp:
         type: u64
+      SlotMaxAmount:
+        type: u64
       MintedAmount:
         type: u64
+        defaultLogic:
+          Move:
+            '0'
       Round:
         type: u64
         defaultLogic:
@@ -104,6 +138,9 @@ aggregates:
       QualifiedRound:
         type: u64
         description: previous qualified round
+        defaultLogic:
+          Move:
+            '0'
       QualifiedInscriptionId:
         type: ID
         description: previous qualified inscription Id.
@@ -122,23 +159,36 @@ aggregates:
       CandidateHash:
         type: vector<u8>
         description: candidate inscription hash.
+      CandidateInscriber:
+        type: address
       CandidateTimestamp:
         type: u64
         description: candidate inscription timestamp.
+      CandidateAmount:
+        type: u64
+      CandidateNonce:
+        type: u128
       CandidateDifference:
         type: u64
         description: candidate difference.
     methods:
       Create:
+        isCreationCommand: true
+        parameters:
+          Clock:
+            referenceType: Clock
+            isIgnoredInEvent: true
         event:
           name: SlotCreated
           isObjectShared: true
           #isObjectFrozen: true
+          properties:
+            GenesisTimestamp:
+              type: u64
+            SlotMaxAmount:
+              type: u64
 
       PutUpCandidate:
-        event:
-          name: CandidateInscriptionPutUp
-          #properties:
         parameters:
           CandidateInscription:
             referenceType: Inscription
@@ -146,19 +196,28 @@ aggregates:
           Clock:
             referenceType: Clock
             isIgnoredInEvent: true
+        event:
+          name: CandidateInscriptionPutUp
+          properties:
+            Round:
+              type: u64
+            CandidateInscriptionId:
+              type: ID
 
       Advance:
         description: advance it to the next round.
-        event:
-          name: SlotAdvanced
-          #properties:
         parameters:
-          CandidateInscription:
-            referenceType: Inscription
-            eventPropertyName: CandidateInscriptionId
-          WitnessInscription:
-            referenceType: Inscription
-            eventPropertyName: WitnessInscriptionId
           Clock:
             referenceType: Clock
             isIgnoredInEvent: true
+#          CandidateInscription:
+#            referenceType: Inscription
+#            eventPropertyName: CandidateInscriptionId
+#          WitnessInscription:
+#            referenceType: Inscription
+#            eventPropertyName: WitnessInscriptionId
+        event:
+          name: SlotAdvanced
+          properties:
+            Round:
+              type: u64

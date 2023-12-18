@@ -46,6 +46,7 @@ module sui_inscription::slot {
         slot_number: u8,
         version: u64,
         genesis_timestamp: u64,
+        slot_max_amount: u64,
         minted_amount: u64,
         round: u64,
         qualified_round: u64,
@@ -55,7 +56,10 @@ module sui_inscription::slot {
         qualified_difference: u64,
         candidate_inscription_id: ID,
         candidate_hash: vector<u8>,
+        candidate_inscriber: address,
         candidate_timestamp: u64,
+        candidate_amount: u64,
+        candidate_nonce: u128,
         candidate_difference: u64,
     }
 
@@ -77,6 +81,14 @@ module sui_inscription::slot {
 
     public(friend) fun set_genesis_timestamp(slot: &mut Slot, genesis_timestamp: u64) {
         slot.genesis_timestamp = genesis_timestamp;
+    }
+
+    public fun slot_max_amount(slot: &Slot): u64 {
+        slot.slot_max_amount
+    }
+
+    public(friend) fun set_slot_max_amount(slot: &mut Slot, slot_max_amount: u64) {
+        slot.slot_max_amount = slot_max_amount;
     }
 
     public fun minted_amount(slot: &Slot): u64 {
@@ -151,12 +163,36 @@ module sui_inscription::slot {
         slot.candidate_hash = candidate_hash;
     }
 
+    public fun candidate_inscriber(slot: &Slot): address {
+        slot.candidate_inscriber
+    }
+
+    public(friend) fun set_candidate_inscriber(slot: &mut Slot, candidate_inscriber: address) {
+        slot.candidate_inscriber = candidate_inscriber;
+    }
+
     public fun candidate_timestamp(slot: &Slot): u64 {
         slot.candidate_timestamp
     }
 
     public(friend) fun set_candidate_timestamp(slot: &mut Slot, candidate_timestamp: u64) {
         slot.candidate_timestamp = candidate_timestamp;
+    }
+
+    public fun candidate_amount(slot: &Slot): u64 {
+        slot.candidate_amount
+    }
+
+    public(friend) fun set_candidate_amount(slot: &mut Slot, candidate_amount: u64) {
+        slot.candidate_amount = candidate_amount;
+    }
+
+    public fun candidate_nonce(slot: &Slot): u128 {
+        slot.candidate_nonce
+    }
+
+    public(friend) fun set_candidate_nonce(slot: &mut Slot, candidate_nonce: u128) {
+        slot.candidate_nonce = candidate_nonce;
     }
 
     public fun candidate_difference(slot: &Slot): u64 {
@@ -170,15 +206,17 @@ module sui_inscription::slot {
     fun new_slot(
         slot_number: u8,
         genesis_timestamp: u64,
-        minted_amount: u64,
-        qualified_round: u64,
+        slot_max_amount: u64,
         qualified_inscription_id: ID,
         qualified_hash: vector<u8>,
         qualified_timestamp: u64,
         qualified_difference: u64,
         candidate_inscription_id: ID,
         candidate_hash: vector<u8>,
+        candidate_inscriber: address,
         candidate_timestamp: u64,
+        candidate_amount: u64,
+        candidate_nonce: u128,
         candidate_difference: u64,
         ctx: &mut TxContext,
     ): Slot {
@@ -187,16 +225,20 @@ module sui_inscription::slot {
             slot_number,
             version: 0,
             genesis_timestamp,
-            minted_amount,
+            slot_max_amount,
+            minted_amount: 0,
             round: 0,
-            qualified_round,
+            qualified_round: 0,
             qualified_inscription_id,
             qualified_hash,
             qualified_timestamp,
             qualified_difference,
             candidate_inscription_id,
             candidate_hash,
+            candidate_inscriber,
             candidate_timestamp,
+            candidate_amount,
+            candidate_nonce,
             candidate_difference,
         }
     }
@@ -205,16 +247,7 @@ module sui_inscription::slot {
         id: option::Option<object::ID>,
         slot_number: u8,
         genesis_timestamp: u64,
-        minted_amount: u64,
-        qualified_round: u64,
-        qualified_inscription_id: ID,
-        qualified_hash: vector<u8>,
-        qualified_timestamp: u64,
-        qualified_difference: u64,
-        candidate_inscription_id: ID,
-        candidate_hash: vector<u8>,
-        candidate_timestamp: u64,
-        candidate_difference: u64,
+        slot_max_amount: u64,
     }
 
     public fun slot_created_id(slot_created: &SlotCreated): option::Option<object::ID> {
@@ -233,74 +266,20 @@ module sui_inscription::slot {
         slot_created.genesis_timestamp
     }
 
-    public fun slot_created_minted_amount(slot_created: &SlotCreated): u64 {
-        slot_created.minted_amount
-    }
-
-    public fun slot_created_qualified_round(slot_created: &SlotCreated): u64 {
-        slot_created.qualified_round
-    }
-
-    public fun slot_created_qualified_inscription_id(slot_created: &SlotCreated): ID {
-        slot_created.qualified_inscription_id
-    }
-
-    public fun slot_created_qualified_hash(slot_created: &SlotCreated): vector<u8> {
-        slot_created.qualified_hash
-    }
-
-    public fun slot_created_qualified_timestamp(slot_created: &SlotCreated): u64 {
-        slot_created.qualified_timestamp
-    }
-
-    public fun slot_created_qualified_difference(slot_created: &SlotCreated): u64 {
-        slot_created.qualified_difference
-    }
-
-    public fun slot_created_candidate_inscription_id(slot_created: &SlotCreated): ID {
-        slot_created.candidate_inscription_id
-    }
-
-    public fun slot_created_candidate_hash(slot_created: &SlotCreated): vector<u8> {
-        slot_created.candidate_hash
-    }
-
-    public fun slot_created_candidate_timestamp(slot_created: &SlotCreated): u64 {
-        slot_created.candidate_timestamp
-    }
-
-    public fun slot_created_candidate_difference(slot_created: &SlotCreated): u64 {
-        slot_created.candidate_difference
+    public fun slot_created_slot_max_amount(slot_created: &SlotCreated): u64 {
+        slot_created.slot_max_amount
     }
 
     public(friend) fun new_slot_created(
         slot_number: u8,
         genesis_timestamp: u64,
-        minted_amount: u64,
-        qualified_round: u64,
-        qualified_inscription_id: ID,
-        qualified_hash: vector<u8>,
-        qualified_timestamp: u64,
-        qualified_difference: u64,
-        candidate_inscription_id: ID,
-        candidate_hash: vector<u8>,
-        candidate_timestamp: u64,
-        candidate_difference: u64,
+        slot_max_amount: u64,
     ): SlotCreated {
         SlotCreated {
             id: option::none(),
             slot_number,
             genesis_timestamp,
-            minted_amount,
-            qualified_round,
-            qualified_inscription_id,
-            qualified_hash,
-            qualified_timestamp,
-            qualified_difference,
-            candidate_inscription_id,
-            candidate_hash,
-            candidate_timestamp,
-            candidate_difference,
+            slot_max_amount,
         }
     }
 
@@ -309,6 +288,7 @@ module sui_inscription::slot {
         slot_number: u8,
         version: u64,
         candidate_inscription_id: ID,
+        round: u64,
     }
 
     public fun candidate_inscription_put_up_id(candidate_inscription_put_up: &CandidateInscriptionPutUp): object::ID {
@@ -323,15 +303,21 @@ module sui_inscription::slot {
         candidate_inscription_put_up.candidate_inscription_id
     }
 
+    public fun candidate_inscription_put_up_round(candidate_inscription_put_up: &CandidateInscriptionPutUp): u64 {
+        candidate_inscription_put_up.round
+    }
+
     public(friend) fun new_candidate_inscription_put_up(
         slot: &Slot,
         candidate_inscription_id: ID,
+        round: u64,
     ): CandidateInscriptionPutUp {
         CandidateInscriptionPutUp {
             id: id(slot),
             slot_number: slot_number(slot),
             version: version(slot),
             candidate_inscription_id,
+            round,
         }
     }
 
@@ -339,8 +325,7 @@ module sui_inscription::slot {
         id: object::ID,
         slot_number: u8,
         version: u64,
-        candidate_inscription_id: ID,
-        witness_inscription_id: ID,
+        round: u64,
     }
 
     public fun slot_advanced_id(slot_advanced: &SlotAdvanced): object::ID {
@@ -351,25 +336,19 @@ module sui_inscription::slot {
         slot_advanced.slot_number
     }
 
-    public fun slot_advanced_candidate_inscription_id(slot_advanced: &SlotAdvanced): ID {
-        slot_advanced.candidate_inscription_id
-    }
-
-    public fun slot_advanced_witness_inscription_id(slot_advanced: &SlotAdvanced): ID {
-        slot_advanced.witness_inscription_id
+    public fun slot_advanced_round(slot_advanced: &SlotAdvanced): u64 {
+        slot_advanced.round
     }
 
     public(friend) fun new_slot_advanced(
         slot: &Slot,
-        candidate_inscription_id: ID,
-        witness_inscription_id: ID,
+        round: u64,
     ): SlotAdvanced {
         SlotAdvanced {
             id: id(slot),
             slot_number: slot_number(slot),
             version: version(slot),
-            candidate_inscription_id,
-            witness_inscription_id,
+            round,
         }
     }
 
@@ -377,15 +356,17 @@ module sui_inscription::slot {
     public(friend) fun create_slot(
         slot_number: u8,
         genesis_timestamp: u64,
-        minted_amount: u64,
-        qualified_round: u64,
+        slot_max_amount: u64,
         qualified_inscription_id: ID,
         qualified_hash: vector<u8>,
         qualified_timestamp: u64,
         qualified_difference: u64,
         candidate_inscription_id: ID,
         candidate_hash: vector<u8>,
+        candidate_inscriber: address,
         candidate_timestamp: u64,
+        candidate_amount: u64,
+        candidate_nonce: u128,
         candidate_difference: u64,
         slot_number_table: &mut SlotNumberTable,
         ctx: &mut TxContext,
@@ -393,15 +374,17 @@ module sui_inscription::slot {
         let slot = new_slot(
             slot_number,
             genesis_timestamp,
-            minted_amount,
-            qualified_round,
+            slot_max_amount,
             qualified_inscription_id,
             qualified_hash,
             qualified_timestamp,
             qualified_difference,
             candidate_inscription_id,
             candidate_hash,
+            candidate_inscriber,
             candidate_timestamp,
+            candidate_amount,
+            candidate_nonce,
             candidate_difference,
             ctx,
         );
@@ -462,6 +445,7 @@ module sui_inscription::slot {
             version: _version,
             slot_number: _slot_number,
             genesis_timestamp: _genesis_timestamp,
+            slot_max_amount: _slot_max_amount,
             minted_amount: _minted_amount,
             round: _round,
             qualified_round: _qualified_round,
@@ -471,7 +455,10 @@ module sui_inscription::slot {
             qualified_difference: _qualified_difference,
             candidate_inscription_id: _candidate_inscription_id,
             candidate_hash: _candidate_hash,
+            candidate_inscriber: _candidate_inscriber,
             candidate_timestamp: _candidate_timestamp,
+            candidate_amount: _candidate_amount,
+            candidate_nonce: _candidate_nonce,
             candidate_difference: _candidate_difference,
         } = slot;
         object::delete(id);

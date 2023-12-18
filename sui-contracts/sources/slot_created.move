@@ -6,7 +6,7 @@
 module sui_inscription::slot_created {
 
     use std::option;
-    use sui::object::{Self, ID};
+    use sui::object;
     use sui_inscription::slot::{Self, SlotCreated};
 
     public fun id(slot_created: &SlotCreated): option::Option<object::ID> {
@@ -21,44 +21,8 @@ module sui_inscription::slot_created {
         slot::slot_created_genesis_timestamp(slot_created)
     }
 
-    public fun minted_amount(slot_created: &SlotCreated): u64 {
-        slot::slot_created_minted_amount(slot_created)
-    }
-
-    public fun qualified_round(slot_created: &SlotCreated): u64 {
-        slot::slot_created_qualified_round(slot_created)
-    }
-
-    public fun qualified_inscription_id(slot_created: &SlotCreated): ID {
-        slot::slot_created_qualified_inscription_id(slot_created)
-    }
-
-    public fun qualified_hash(slot_created: &SlotCreated): vector<u8> {
-        slot::slot_created_qualified_hash(slot_created)
-    }
-
-    public fun qualified_timestamp(slot_created: &SlotCreated): u64 {
-        slot::slot_created_qualified_timestamp(slot_created)
-    }
-
-    public fun qualified_difference(slot_created: &SlotCreated): u64 {
-        slot::slot_created_qualified_difference(slot_created)
-    }
-
-    public fun candidate_inscription_id(slot_created: &SlotCreated): ID {
-        slot::slot_created_candidate_inscription_id(slot_created)
-    }
-
-    public fun candidate_hash(slot_created: &SlotCreated): vector<u8> {
-        slot::slot_created_candidate_hash(slot_created)
-    }
-
-    public fun candidate_timestamp(slot_created: &SlotCreated): u64 {
-        slot::slot_created_candidate_timestamp(slot_created)
-    }
-
-    public fun candidate_difference(slot_created: &SlotCreated): u64 {
-        slot::slot_created_candidate_difference(slot_created)
+    public fun slot_max_amount(slot_created: &SlotCreated): u64 {
+        slot::slot_created_slot_max_amount(slot_created)
     }
 
 }

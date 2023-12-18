@@ -6,7 +6,6 @@
 module sui_inscription::certificate_issued {
 
     use std::option;
-    use std::string::String;
     use sui::object::{Self, ID};
     use sui_inscription::certificate::{Self, CertificateIssued};
 
@@ -14,8 +13,8 @@ module sui_inscription::certificate_issued {
         certificate::certificate_issued_id(certificate_issued)
     }
 
-    public fun inscription_object_id(certificate_issued: &CertificateIssued): ID {
-        certificate::certificate_issued_inscription_object_id(certificate_issued)
+    public fun inscription_id(certificate_issued: &CertificateIssued): ID {
+        certificate::certificate_issued_inscription_id(certificate_issued)
     }
 
     public fun inscription_hash(certificate_issued: &CertificateIssued): vector<u8> {
@@ -42,12 +41,8 @@ module sui_inscription::certificate_issued {
         certificate::certificate_issued_amount(certificate_issued)
     }
 
-    public fun inscription_content(certificate_issued: &CertificateIssued): String {
-        certificate::certificate_issued_inscription_content(certificate_issued)
-    }
-
-    public fun certificate_type(certificate_issued: &CertificateIssued): u8 {
-        certificate::certificate_issued_certificate_type(certificate_issued)
+    public fun inscription_nonce(certificate_issued: &CertificateIssued): u128 {
+        certificate::certificate_issued_inscription_nonce(certificate_issued)
     }
 
 }

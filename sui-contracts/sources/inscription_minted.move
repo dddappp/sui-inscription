@@ -14,16 +14,24 @@ module sui_inscription::inscription_minted {
         inscription::inscription_minted_id(inscription_minted)
     }
 
-    public fun hash(inscription_minted: &InscriptionMinted): vector<u8> {
-        inscription::inscription_minted_hash(inscription_minted)
-    }
-
     public fun slot_number(inscription_minted: &InscriptionMinted): u8 {
         inscription::inscription_minted_slot_number(inscription_minted)
     }
 
     public fun round(inscription_minted: &InscriptionMinted): u64 {
         inscription::inscription_minted_round(inscription_minted)
+    }
+
+    public fun amount(inscription_minted: &InscriptionMinted): u64 {
+        inscription::inscription_minted_amount(inscription_minted)
+    }
+
+    public fun nonce(inscription_minted: &InscriptionMinted): u128 {
+        inscription::inscription_minted_nonce(inscription_minted)
+    }
+
+    public fun content(inscription_minted: &InscriptionMinted): String {
+        inscription::inscription_minted_content(inscription_minted)
     }
 
     public fun inscriber(inscription_minted: &InscriptionMinted): address {
@@ -34,12 +42,8 @@ module sui_inscription::inscription_minted {
         inscription::inscription_minted_timestamp(inscription_minted)
     }
 
-    public fun amount(inscription_minted: &InscriptionMinted): u64 {
-        inscription::inscription_minted_amount(inscription_minted)
-    }
-
-    public fun content(inscription_minted: &InscriptionMinted): String {
-        inscription::inscription_minted_content(inscription_minted)
+    public fun hash(inscription_minted: &InscriptionMinted): vector<u8> {
+        inscription::inscription_minted_hash(inscription_minted)
     }
 
 }

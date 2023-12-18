@@ -1,43 +1,37 @@
-#[allow(unused_variable, unused_use, unused_mut_parameter, unused_assignment)]
+#[allow(unused_variable, unused_use, unused_assignment, unused_mut_parameter)]
 module sui_inscription::slot_create_logic {
-    use sui::object::ID;
+    use std::vector;
+
+    use sui::clock::{Self, Clock};
     use sui::tx_context::TxContext;
+
+    use sui_inscription::id_util;
     use sui_inscription::slot;
     use sui_inscription::slot_created;
 
     friend sui_inscription::slot_aggregate;
 
+    const EWrongSlotNumber: u64 = 100;
+
+    const MAX_SLOT_NUMBER: u8 = 209;
+    const SLOT_MAX_AMOUNT: u64 = 9_999_999_996_480;
+    const LAST_SLOT_SUPPLEMENT: u64 = 739_200;
+    const MAJOR_DIFFERENCE_SCALE_FACTOR: u64 = 1_000_000;
+
     public(friend) fun verify(
         slot_number: u8,
-        genesis_timestamp: u64,
-        minted_amount: u64,
-        qualified_round: u64,
-        qualified_inscription_id: ID,
-        qualified_hash: vector<u8>,
-        qualified_timestamp: u64,
-        qualified_difference: u64,
-        candidate_inscription_id: ID,
-        candidate_hash: vector<u8>,
-        candidate_timestamp: u64,
-        candidate_difference: u64,
+        clock: &Clock,
         slot_number_table: &slot::SlotNumberTable,
-        ctx: &mut TxContext,
+        _ctx: &mut TxContext,
     ): slot::SlotCreated {
-        let _ = ctx;
+        assert!(slot_number <= MAX_SLOT_NUMBER, EWrongSlotNumber);
         slot::asset_slot_number_not_exists(slot_number, slot_number_table);
+        let genesis_timestamp = clock::timestamp_ms(clock);
+        let slot_max_amount = if (slot_number == MAX_SLOT_NUMBER) { SLOT_MAX_AMOUNT + LAST_SLOT_SUPPLEMENT } else { SLOT_MAX_AMOUNT };
         slot::new_slot_created(
             slot_number,
             genesis_timestamp,
-            minted_amount,
-            qualified_round,
-            qualified_inscription_id,
-            qualified_hash,
-            qualified_timestamp,
-            qualified_difference,
-            candidate_inscription_id,
-            candidate_hash,
-            candidate_timestamp,
-            candidate_difference,
+            slot_max_amount,
         )
     }
 
@@ -48,32 +42,24 @@ module sui_inscription::slot_create_logic {
     ): slot::Slot {
         let slot_number = slot_created::slot_number(slot_created);
         let genesis_timestamp = slot_created::genesis_timestamp(slot_created);
-        let minted_amount = slot_created::minted_amount(slot_created);
-        let qualified_round = slot_created::qualified_round(slot_created);
-        let qualified_inscription_id = slot_created::qualified_inscription_id(slot_created);
-        let qualified_hash = slot_created::qualified_hash(slot_created);
-        let qualified_timestamp = slot_created::qualified_timestamp(slot_created);
-        let qualified_difference = slot_created::qualified_difference(slot_created);
-        let candidate_inscription_id = slot_created::candidate_inscription_id(slot_created);
-        let candidate_hash = slot_created::candidate_hash(slot_created);
-        let candidate_timestamp = slot_created::candidate_timestamp(slot_created);
-        let candidate_difference = slot_created::candidate_difference(slot_created);
+        let slot_max_amount = slot_created::slot_max_amount(slot_created);
         slot::create_slot(
             slot_number,
             genesis_timestamp,
-            minted_amount,
-            qualified_round,
-            qualified_inscription_id,
-            qualified_hash,
-            qualified_timestamp,
-            qualified_difference,
-            candidate_inscription_id,
-            candidate_hash,
-            candidate_timestamp,
-            candidate_difference,
+            slot_max_amount,
+            id_util::id_placeholder(),
+            vector::empty(),
+            0,
+            256 * MAJOR_DIFFERENCE_SCALE_FACTOR,
+            id_util::id_placeholder(),
+            vector::empty(),
+            id_util::address_placeholder(),
+            0,
+            0,
+            0,
+            256 * MAJOR_DIFFERENCE_SCALE_FACTOR,
             slot_number_table,
             ctx,
         )
     }
-
 }

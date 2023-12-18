@@ -20,4 +20,8 @@ module sui_inscription::candidate_inscription_put_up {
         slot::candidate_inscription_put_up_candidate_inscription_id(candidate_inscription_put_up)
     }
 
+    public fun round(candidate_inscription_put_up: &CandidateInscriptionPutUp): u64 {
+        slot::candidate_inscription_put_up_round(candidate_inscription_put_up)
+    }
+
 }
