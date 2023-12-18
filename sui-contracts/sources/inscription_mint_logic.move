@@ -10,6 +10,10 @@ module sui_inscription::inscription_mint_logic {
     use sui_inscription::inscription;
     use sui_inscription::inscription_minted;
 
+    const MINT_AMOUNT_LIMIT: u64 = 385802469;
+
+    const EAmountTooLarge: u64 = 100;
+
     friend sui_inscription::inscription_aggregate;
 
     public(friend) fun verify(
@@ -21,6 +25,7 @@ module sui_inscription::inscription_mint_logic {
         clock: &Clock,
         ctx: &mut TxContext,
     ): inscription::InscriptionMinted {
+        assert!(amount <= MINT_AMOUNT_LIMIT, EAmountTooLarge);
         let inscriber = tx_context::sender(ctx);
         let timestamp = clock::timestamp_ms(clock);
         let hash = hash_util::hash_inscription(

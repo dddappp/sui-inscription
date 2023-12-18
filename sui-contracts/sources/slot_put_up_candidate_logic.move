@@ -21,7 +21,7 @@ module sui_inscription::slot_put_up_candidate_logic {
     const EInvalidAmount: u64 = 103;
 
     const MAJOR_DIFFERENCE_SCALE_FACTOR: u64 = 1_000_000;
-    const TEN_MINUTES_IN_MILLISECONDS: u64 = 600000;
+    const MINT_AMOUNT_LIMIT: u64 = 385802469;
 
     public(friend) fun verify(
         candidate_inscription: &Inscription,
@@ -31,6 +31,7 @@ module sui_inscription::slot_put_up_candidate_logic {
     ): slot::CandidateInscriptionPutUp {
         assert!(slot::round(slot) == inscription::round(candidate_inscription), EInvalidRound);
         assert!(slot::slot_number(slot) == inscription::slot_number(candidate_inscription), EInvalidSlotNumber);
+        assert!(inscription::amount(candidate_inscription) <= MINT_AMOUNT_LIMIT, EInvalidAmount);
         assert!(
             slot::slot_max_amount(slot) >= slot::minted_amount(slot) + inscription::amount(candidate_inscription),
             EInvalidAmount
@@ -64,8 +65,8 @@ module sui_inscription::slot_put_up_candidate_logic {
                 round
             );
             let time_diff = if (candidate_elapsed_time > qualified_elapsed_time) { candidate_elapsed_time - qualified_elapsed_time } else { qualified_elapsed_time - candidate_elapsed_time };
-            if (time_diff > TEN_MINUTES_IN_MILLISECONDS) {
-                candidate_elapsed_time = candidate_elapsed_time + TEN_MINUTES_IN_MILLISECONDS;
+            if (time_diff > time_util::round_duration_ms()) {
+                candidate_elapsed_time = candidate_elapsed_time + time_util::round_duration_ms();
             };
             candidate_difference = diff::calculate_difference(
                 qualified_hash,
