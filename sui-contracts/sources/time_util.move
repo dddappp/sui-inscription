@@ -1,6 +1,7 @@
 module sui_inscription::time_util {
-    const TEN_MINUTES_IN_MILLISECONDS: u64 = 600000;
-    const ROUND_DURATION_MS: u64 = TEN_MINUTES_IN_MILLISECONDS;
+    //const TEN_MINUTES_IN_MILLISECONDS: u64 =    600000;
+    const THREE_MINUTES_IN_MILLISECONDS: u64 =  180000;
+    const ROUND_DURATION_MS: u64 = THREE_MINUTES_IN_MILLISECONDS; //TEN_MINUTES_IN_MILLISECONDS;
 
     public fun round_duration_ms(): u64 {
         ROUND_DURATION_MS
