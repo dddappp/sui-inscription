@@ -1,12 +1,12 @@
 #[allow(unused_variable, unused_use, unused_assignment, unused_mut_parameter)]
 module sui_inscription::inscription_mint_logic {
     use std::string::String;
-    use std::vector;
 
     use sui::clock;
     use sui::clock::Clock;
     use sui::tx_context::{Self, TxContext};
 
+    use sui_inscription::hash_util;
     use sui_inscription::inscription;
     use sui_inscription::inscription_minted;
 
@@ -23,7 +23,14 @@ module sui_inscription::inscription_mint_logic {
     ): inscription::InscriptionMinted {
         let inscriber = tx_context::sender(ctx);
         let timestamp = clock::timestamp_ms(clock);
-        let hash = vector::empty<u8>();//todo
+        let hash = hash_util::hash_inscription(
+            slot_number,
+            round,
+            inscriber,
+            timestamp,
+            amount,
+            nonce,
+        );
         inscription::new_inscription_minted(
             slot_number,
             round,
