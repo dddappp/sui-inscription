@@ -5,6 +5,7 @@
 
 module sui_inscription::candidate_inscription_put_up {
 
+    use std::string::String;
     use sui::object::{Self, ID};
     use sui_inscription::slot::{Self, CandidateInscriptionPutUp};
 
@@ -46,6 +47,10 @@ module sui_inscription::candidate_inscription_put_up {
 
     public fun candidate_difference(candidate_inscription_put_up: &CandidateInscriptionPutUp): u64 {
         slot::candidate_inscription_put_up_candidate_difference(candidate_inscription_put_up)
+    }
+
+    public fun candidate_content(candidate_inscription_put_up: &CandidateInscriptionPutUp): String {
+        slot::candidate_inscription_put_up_candidate_content(candidate_inscription_put_up)
     }
 
 }

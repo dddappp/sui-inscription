@@ -101,6 +101,7 @@ module sui_inscription::slot_put_up_candidate_logic {
             inscription::amount(candidate_inscription),
             inscription::nonce(candidate_inscription),
             candidate_difference,
+            inscription::content(candidate_inscription),
         )
     }
 
@@ -129,6 +130,6 @@ module sui_inscription::slot_put_up_candidate_logic {
             slot,
             candidate_inscription_put_up::candidate_difference(candidate_inscription_put_up)
         );
-        //todo slot::set_candidate_content(slot, candidate_inscription_put_up::candidate_content(candidate_inscription_put_up));
+        slot::set_candidate_content(slot, candidate_inscription_put_up::candidate_content(candidate_inscription_put_up));
     }
 }

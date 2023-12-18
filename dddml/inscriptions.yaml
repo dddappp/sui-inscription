@@ -218,6 +218,9 @@ aggregates:
               type: u128
             CandidateDifference:
               type: u64
+            CandidateContent:
+              type: String
+              length: 1000
 
       Advance:
         description: advance it to the next round.
