@@ -115,6 +115,7 @@ aggregates:
       #CRUD_IT_NO_DELETE: true
       #CRUD_IT_NO_UPDATE: true
       #CRUD_IT_CREATE_METHOD_NAME: Create
+      IS_MOVE_SCHEMA_VERSIONED: true
     id:
       name: SlotNumber
       type: u8

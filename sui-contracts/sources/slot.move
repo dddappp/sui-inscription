@@ -34,6 +34,7 @@ module sui_inscription::slot {
         id: UID,
     }
 
+
     struct SlotNumberTable has key {
         id: UID,
         table: table::Table<u8, object::ID>,
@@ -63,9 +64,7 @@ module sui_inscription::slot {
         id: UID,
         slot_number: u8,
         version: u64,
-        // 2. Track the current schema version of the shared object
         schema_version: u64,
-        // 3. Associate the object with its `AdminCap`
         admin_cap: ID,
         genesis_timestamp: u64,
         slot_max_amount: u64,
@@ -285,7 +284,6 @@ module sui_inscription::slot {
         }
     }
 
-    // Introduce a migrate function
     entry fun migrate(slot: &mut Slot, a: &AdminCap) {
         assert!(slot.admin_cap == object::id(a), ENotAdmin);
         assert!(slot.schema_version < SCHEMA_VERSION, ENotUpgrade);
@@ -542,8 +540,8 @@ module sui_inscription::slot {
     public(friend) fun drop_slot(slot: Slot) {
         let Slot {
             id,
-            version: _version,
             slot_number: _slot_number,
+            version: _version,
             schema_version: _,
             admin_cap: _,
             genesis_timestamp: _genesis_timestamp,
