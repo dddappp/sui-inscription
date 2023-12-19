@@ -21,6 +21,19 @@ module sui_inscription::slot {
     const EDataTooLong: u64 = 102;
     const EInappropriateVersion: u64 = 103;
 
+    /// Not the right admin for the object
+    const ENotAdmin: u64 = 0;
+    /// Migration is not an upgrade
+    const ENotUpgrade: u64 = 1;
+    /// Calling functions from the wrong package version
+    const EWrongSchemaVersion: u64 = 2;
+
+    const SCHEMA_VERSION: u64 = 0;
+
+    struct AdminCap has key {
+        id: UID,
+    }
+
     struct SlotNumberTable has key {
         id: UID,
         table: table::Table<u8, object::ID>,
@@ -42,10 +55,18 @@ module sui_inscription::slot {
         });
     }
 
+    public fun asssert_schema_version(slot: &Slot) {
+        assert!(slot.schema_version == SCHEMA_VERSION, EWrongSchemaVersion);
+    }
+
     struct Slot has key {
         id: UID,
         slot_number: u8,
         version: u64,
+        // 2. Track the current schema version of the shared object
+        schema_version: u64,
+        // 3. Associate the object with its `AdminCap`
+        admin_cap: ID,
         genesis_timestamp: u64,
         slot_max_amount: u64,
         minted_amount: u64,
@@ -233,10 +254,17 @@ module sui_inscription::slot {
         ctx: &mut TxContext,
     ): Slot {
         assert!(std::string::length(&candidate_content) <= 1000, EDataTooLong);
+        let admin_cap = AdminCap {
+            id: object::new(ctx),
+        };
+        let admin_cap_id = object::id(&admin_cap);
+        transfer::transfer(admin_cap, sui::tx_context::sender(ctx));
         Slot {
             id: object::new(ctx),
             slot_number,
             version: 0,
+            schema_version: SCHEMA_VERSION,
+            admin_cap: admin_cap_id,
             genesis_timestamp,
             slot_max_amount,
             minted_amount: 0,
@@ -255,6 +283,13 @@ module sui_inscription::slot {
             candidate_difference,
             candidate_content,
         }
+    }
+
+    // Introduce a migrate function
+    entry fun migrate(slot: &mut Slot, a: &AdminCap) {
+        assert!(slot.admin_cap == object::id(a), ENotAdmin);
+        assert!(slot.schema_version < SCHEMA_VERSION, ENotUpgrade);
+        slot.schema_version = SCHEMA_VERSION;
     }
 
     struct SlotCreated has copy, drop {
@@ -509,6 +544,8 @@ module sui_inscription::slot {
             id,
             version: _version,
             slot_number: _slot_number,
+            schema_version: _,
+            admin_cap: _,
             genesis_timestamp: _genesis_timestamp,
             slot_max_amount: _slot_max_amount,
             minted_amount: _minted_amount,
