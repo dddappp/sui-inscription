@@ -20,6 +20,7 @@ module sui_inscription::slot_put_up_candidate_logic {
     const EInvalidCandidateDifference: u64 = 102;
     const EInvalidAmount: u64 = 103;
     const ENeedToAdvanceRound: u64 = 104;
+    const EJumpedTheGun: u64 = 105;
 
     const MAJOR_DIFFERENCE_SCALE_FACTOR: u64 = 1_000_000;
     const MINT_AMOUNT_LIMIT: u64 = 385802469;
@@ -38,14 +39,18 @@ module sui_inscription::slot_put_up_candidate_logic {
             EInvalidAmount
         );
         let round = slot::round(slot);
+        let genesis_timestamp = slot::genesis_timestamp(slot);
         //let current_timestamp = clock::timestamp_ms(clock);
+        assert!(
+            inscription::timestamp(candidate_inscription) >= time_util::round_started_at(genesis_timestamp, round),
+            EJumpedTheGun
+        );
+
         let due_rounds = time_util::count_rounds(slot::genesis_timestamp(slot), clock::timestamp_ms(clock));
         assert!(
             due_rounds <= round || slot::candidate_inscription_id(slot) == id_util::id_placeholder(),
             ENeedToAdvanceRound
         );
-
-        let genesis_timestamp = slot::genesis_timestamp(slot);
 
         let qualified_difference = slot::qualified_difference(slot);
         let qualified_hash = slot::qualified_hash(slot);

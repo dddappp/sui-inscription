@@ -20,6 +20,10 @@ module sui_inscription::time_util {
         diff / ROUND_DURATION_MS
     }
 
+    public fun round_started_at(genesis_timestamp: u64, round: u64): u64 {
+        genesis_timestamp + round * ROUND_DURATION_MS
+    }
+
     public fun elapsed_time_after_round(genesis_timestamp: u64, timestamp: u64, round: u64): u64 {
         timestamp - genesis_timestamp - round * ROUND_DURATION_MS
     }
