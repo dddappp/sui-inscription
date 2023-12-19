@@ -17,7 +17,7 @@ module sui_inscription::certificate_issue_logic {
         amount: u64,
         inscription_nonce: u128,
         inscription_content: String,
-        ctx: &mut TxContext,
+        ctx: &TxContext,//&mut TxContext,
     ): certificate::CertificateIssued {
         let _ = ctx;
         certificate::new_certificate_issued(
