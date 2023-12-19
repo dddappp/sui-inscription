@@ -68,6 +68,17 @@ sui client call --package 0x51095498d7bd253ffaa719b20ece8efce3dc02f9ed6b65a9ce30
 sui client call --package 0x51095498d7bd253ffaa719b20ece8efce3dc02f9ed6b65a9ce3072b43b2dd7b3 --module inscription_aggregate --function delete \
 --args 0x8ea9c895b356e33568978c37792d40a7025b16d38be7a3dc32e21656a07dae7f \
 --gas-budget 1000000000
+
+# ---------------------------------------------------------------------------------------------
+# Of course, you could combine `advance` and `put_up_candidate` into one step, 
+# i.e., send the winner of the previous round to leave and try to put your own candidate inscription into the slot.
+# Let's say you minted an inscription of current round with Id 0xf28ae48d8dd26569d898a5462f5d7782685e6b632a4aaf27dedc0ef3998a5ddd 
+# The slot Id is 0x2647f0df047e63aeca26200c820dd884657ae1711815c8f1448ee2a3e1cd3724
+# Then, you can execute the following command:
+sui client call --package {PACKAGE_ID} --module slot_service --function advance_and_put_up_candidate \
+--args 0x2647f0df047e63aeca26200c820dd884657ae1711815c8f1448ee2a3e1cd3724 \"0xf28ae48d8dd26569d898a5462f5d7782685e6b632a4aaf27dedc0ef3998a5ddd\" \"0x6\" \
+--gas-budget 1000000000
+
 ```
 
 
