@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"[]>
+<hibernate-mapping package="org.dddappp.suiinscription.domain.slot">
+  <class name="org.dddappp.suiinscription.domain.slot.AbstractSlotState$SimpleSlotState" table="slot">
+    <id name="slotNumber" column="slot_number">
+      <generator class="assigned" />
+    </id>
+    <version name="offChainVersion" column="off_chain_version" type="long" />
+    <property name="id_">
+      <column name="id" unique-key="unique_slot_sid" sql-type="VARCHAR(66)" />
+    </property>
+    <property name="genesisTimestamp">
+      <column name="genesis_timestamp" sql-type="DECIMAL(20,0)" />
+    </property>
+    <property name="slotMaxAmount">
+      <column name="slot_max_amount" sql-type="DECIMAL(20,0)" />
+    </property>
+    <property name="mintedAmount">
+      <column name="minted_amount" sql-type="DECIMAL(20,0)" />
+    </property>
+    <property name="round">
+      <column name="round" sql-type="DECIMAL(20,0)" />
+    </property>
+    <property name="qualifiedRound">
+      <column name="qualified_round" sql-type="DECIMAL(20,0)" />
+    </property>
+    <property name="qualifiedInscriptionId">
+      <column name="qualified_inscription_id" sql-type="VARCHAR(66)" />
+    </property>
+    <property name="qualifiedHash">
+      <column name="qualified_hash" />
+    </property>
+    <property name="qualifiedTimestamp">
+      <column name="qualified_timestamp" sql-type="DECIMAL(20,0)" />
+    </property>
+    <property name="qualifiedDifference">
+      <column name="qualified_difference" sql-type="DECIMAL(20,0)" />
+    </property>
+    <property name="candidateInscriptionId">
+      <column name="candidate_inscription_id" sql-type="VARCHAR(66)" />
+    </property>
+    <property name="candidateHash">
+      <column name="candidate_hash" />
+    </property>
+    <property name="candidateInscriber">
+      <column name="candidate_inscriber" sql-type="VARCHAR(66)" />
+    </property>
+    <property name="candidateTimestamp">
+      <column name="candidate_timestamp" sql-type="DECIMAL(20,0)" />
+    </property>
+    <property name="candidateAmount">
+      <column name="candidate_amount" sql-type="DECIMAL(20,0)" />
+    </property>
+    <property name="candidateNonce">
+      <column name="candidate_nonce" sql-type="DECIMAL(20,0)" />
+    </property>
+    <property name="candidateDifference">
+      <column name="candidate_difference" sql-type="DECIMAL(20,0)" />
+    </property>
+    <property name="candidateContent">
+      <column name="candidate_content" length="1000" />
+    </property>
+    <property name="version">
+      <column name="version" sql-type="DECIMAL(20,0)" />
+    </property>
+    <property name="createdBy">
+      <column name="created_by" />
+    </property>
+    <property name="updatedBy">
+      <column name="updated_by" />
+    </property>
+    <property name="active">
+      <column name="active" />
+    </property>
+    <property name="deleted">
+      <column name="deleted" />
+    </property>
+    <property name="createdAt" column="created_at" />
+    <property name="updatedAt" column="updated_at" />
+  </class>
+</hibernate-mapping>

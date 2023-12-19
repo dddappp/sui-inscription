@@ -1,3 +1,4 @@
 Move.lock
 sui-contracts/build
-sui-java-service
+sui-java-service/*/target
+sui-java-service/scripts
