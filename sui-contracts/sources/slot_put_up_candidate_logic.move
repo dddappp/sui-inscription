@@ -40,7 +40,10 @@ module sui_inscription::slot_put_up_candidate_logic {
         let round = slot::round(slot);
         //let current_timestamp = clock::timestamp_ms(clock);
         let due_rounds = time_util::count_rounds(slot::genesis_timestamp(slot), clock::timestamp_ms(clock));
-        assert!(due_rounds <= round || slot::candidate_inscription_id(slot) == id_util::id_placeholder(), ENeedToAdvanceRound);
+        assert!(
+            due_rounds <= round || slot::candidate_inscription_id(slot) == id_util::id_placeholder(),
+            ENeedToAdvanceRound
+        );
 
         let genesis_timestamp = slot::genesis_timestamp(slot);
 

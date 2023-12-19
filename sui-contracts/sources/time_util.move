@@ -1,7 +1,9 @@
 module sui_inscription::time_util {
-    //const TEN_MINUTES_IN_MILLISECONDS: u64 =    600000;
-    const THREE_MINUTES_IN_MILLISECONDS: u64 =  180000;
-    const ROUND_DURATION_MS: u64 = THREE_MINUTES_IN_MILLISECONDS; //TEN_MINUTES_IN_MILLISECONDS;
+    //const TEN_MINUTES_IN_MILLISECONDS: u64 =          600000;
+    //const THREE_MINUTES_IN_MILLISECONDS: u64 =        180000;
+    const TWO_AND_A_HALF_MINUTES_IN_MILLISECONDS: u64 = 150000;
+    //const TWO_MINUTES_IN_MILLISECONDS: u64 =  120000;
+    const ROUND_DURATION_MS: u64 = TWO_AND_A_HALF_MINUTES_IN_MILLISECONDS;
 
     public fun round_duration_ms(): u64 {
         ROUND_DURATION_MS
@@ -19,7 +21,7 @@ module sui_inscription::time_util {
     }
 
     public fun elapsed_time_after_round(genesis_timestamp: u64, timestamp: u64, round: u64): u64 {
-       timestamp - genesis_timestamp - round * ROUND_DURATION_MS
+        timestamp - genesis_timestamp - round * ROUND_DURATION_MS
     }
 
     public fun is_in_first_half_of_round(genesis_timestamp: u64, timestamp: u64, round: u64): bool {

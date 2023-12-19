@@ -8,20 +8,22 @@ module sui_inscription::diff {
     const BYTE_DIFFERENCE_SCALE_FACTOR: u64 = 3000;
     const TIMESTAMP_DIFFERENCE_SCALE_FACTOR: u64 = 3;
 
+    /// Calculate the difference,
+    /// with the difference in hash as the main difference
+    /// and the difference in computation time consumed as the supplement.
     public fun calculate_difference(hash_1: vector<u8>, hash_2: vector<u8>, time_1: u64, time_2: u64): u64 {
         assert!(vector::length(&hash_1) == 32, 1);
         assert!(vector::length(&hash_2) == 32, 1);
         let d = major_defference_between_hashes(hash_1, hash_2) * MAJOR_DIFFERENCE_SCALE_FACTOR;
-        //debug::print(&d);
+
         let d_0 = difference_between_bytes(*vector::borrow(&hash_1, 0), *vector::borrow(&hash_2, 0));
         let d_1 = difference_between_bytes(*vector::borrow(&hash_1, 1), *vector::borrow(&hash_2, 1));
         let d_2 = difference_between_bytes(*vector::borrow(&hash_1, 2), *vector::borrow(&hash_2, 2));
         d = d + ((d_0 as u64) + (d_1 as u64) + (d_2 as u64)) * BYTE_DIFFERENCE_SCALE_FACTOR;
-        //debug::print(&d);
+
         d = d +
             (if (time_2 > time_1) { time_2 - time_1 } else { time_1 - time_2 })
                 * TIMESTAMP_DIFFERENCE_SCALE_FACTOR;
-        //debug::print(&d);
         d
     }
 

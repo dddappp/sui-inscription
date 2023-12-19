@@ -33,17 +33,17 @@ module sui_inscription::slot_advance_logic {
         slot: &mut slot::Slot,
         _ctx: &mut TxContext, // modify the reference to mutable if needed
     ) {
-        //let round = slot_advanced::round(slot_advanced);
-        let qualified_round = slot::round(slot);
         let slot_number = slot::slot_number(slot);
 
+        // candidate to qualified
+        let qualified_round = slot::round(slot);
         let inscription_id = slot::candidate_inscription_id(slot);
         let inscription_hash = slot::candidate_hash(slot);
         let inscriber = slot::candidate_inscriber(slot);
         let inscription_timestamp = slot::candidate_timestamp(slot);
         let amount = slot::candidate_amount(slot);
         let inscription_nonce = slot::candidate_nonce(slot);
-
+        // issue certificate
         certificate_aggregate::issue(
             inscription_id,
             inscription_hash,
@@ -56,10 +56,9 @@ module sui_inscription::slot_advance_logic {
             slot::candidate_content(slot),
             _ctx,
         );
-        // update amount
+        // update minted amount!
         let minted_amount = slot::minted_amount(slot);
         slot::set_minted_amount(slot, minted_amount + amount);
-
         slot::set_qualified_round(slot, qualified_round);
         slot::set_qualified_inscription_id(slot, inscription_id);
         slot::set_qualified_hash(slot, inscription_hash);
@@ -67,6 +66,7 @@ module sui_inscription::slot_advance_logic {
         let candidate_difference = slot::candidate_difference(slot);
         slot::set_qualified_difference(slot, candidate_difference);
 
+        // reset candidate
         slot::set_candidate_inscription_id(slot, id_util::id_placeholder());
         slot::set_round(slot, qualified_round + 1);
     }
