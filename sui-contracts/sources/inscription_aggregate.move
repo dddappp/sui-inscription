@@ -8,6 +8,7 @@ module sui_inscription::inscription_aggregate {
     use sui::clock::Clock;
     use sui::tx_context;
     use sui_inscription::inscription;
+    use sui_inscription::inscription_delete_logic;
     use sui_inscription::inscription_mint_logic;
 
     public entry fun mint(
@@ -35,6 +36,23 @@ module sui_inscription::inscription_aggregate {
         inscription::set_inscription_minted_id(&mut inscription_minted, inscription::id(&inscription));
         inscription::transfer_object(inscription, tx_context::sender(ctx));
         inscription::emit_inscription_minted(inscription_minted);
+    }
+
+    public entry fun delete(
+        inscription: inscription::Inscription,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        let inscription_deleted = inscription_delete_logic::verify(
+            &inscription,
+            ctx,
+        );
+        let updated_inscription = inscription_delete_logic::mutate(
+            &inscription_deleted,
+            inscription,
+            ctx,
+        );
+        inscription::drop_inscription(updated_inscription);
+        inscription::emit_inscription_deleted(inscription_deleted);
     }
 
 }

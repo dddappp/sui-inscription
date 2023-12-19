@@ -11,6 +11,7 @@ module sui_inscription::inscription {
     use sui::transfer;
     use sui::tx_context::TxContext;
     friend sui_inscription::inscription_mint_logic;
+    friend sui_inscription::inscription_delete_logic;
     friend sui_inscription::inscription_aggregate;
 
     #[allow(unused_const)]
@@ -204,6 +205,24 @@ module sui_inscription::inscription {
         }
     }
 
+    struct InscriptionDeleted has copy, drop {
+        id: object::ID,
+        version: u64,
+    }
+
+    public fun inscription_deleted_id(inscription_deleted: &InscriptionDeleted): object::ID {
+        inscription_deleted.id
+    }
+
+    public(friend) fun new_inscription_deleted(
+        inscription: &Inscription,
+    ): InscriptionDeleted {
+        InscriptionDeleted {
+            id: id(inscription),
+            version: version(inscription),
+        }
+    }
+
 
     #[lint_allow(custom_state_change)]
     public(friend) fun transfer_object(inscription: Inscription, recipient: address) {
@@ -258,6 +277,10 @@ module sui_inscription::inscription {
 
     public(friend) fun emit_inscription_minted(inscription_minted: InscriptionMinted) {
         event::emit(inscription_minted);
+    }
+
+    public(friend) fun emit_inscription_deleted(inscription_deleted: InscriptionDeleted) {
+        event::emit(inscription_deleted);
     }
 
 }
