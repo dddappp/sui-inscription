@@ -10,8 +10,8 @@
     <property name="inscriptionId">
       <column name="inscription_id" sql-type="VARCHAR(66)" />
     </property>
-    <property name="inscriptionHash">
-      <column name="inscription_hash" />
+    <property name="inscriptionHash" type="org.dddappp.suiinscription.domain.hibernate.IntArrayStringType">
+      <column name="inscription_hash" length="162" />
     </property>
     <property name="slotNumber">
       <column name="slot_number" />

@@ -7,8 +7,8 @@
       <generator class="assigned" />
     </id>
     <version name="offChainVersion" column="off_chain_version" type="long" />
-    <property name="hash">
-      <column name="hash" />
+    <property name="hash" type="org.dddappp.suiinscription.domain.hibernate.IntArrayStringType">
+      <column name="hash" length="162" />
     </property>
     <property name="slotNumber">
       <column name="slot_number" />

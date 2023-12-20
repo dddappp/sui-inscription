@@ -241,3 +241,9 @@ aggregates:
           properties:
             Round:
               type: u64
+
+#configuration:
+#  hibernate:
+#    hibernateTypes:
+#      IntArray:
+#        mappingType: "org.dddappp.suiinscription.domain.hibernate.IntArrayStringType"

@@ -27,8 +27,8 @@
     <property name="qualifiedInscriptionId">
       <column name="qualified_inscription_id" sql-type="VARCHAR(66)" />
     </property>
-    <property name="qualifiedHash">
-      <column name="qualified_hash" />
+    <property name="qualifiedHash" type="org.dddappp.suiinscription.domain.hibernate.IntArrayStringType">
+      <column name="qualified_hash" length="162" />
     </property>
     <property name="qualifiedTimestamp">
       <column name="qualified_timestamp" sql-type="DECIMAL(20,0)" />
@@ -39,8 +39,8 @@
     <property name="candidateInscriptionId">
       <column name="candidate_inscription_id" sql-type="VARCHAR(66)" />
     </property>
-    <property name="candidateHash">
-      <column name="candidate_hash" />
+    <property name="candidateHash" type="org.dddappp.suiinscription.domain.hibernate.IntArrayStringType">
+      <column name="candidate_hash" length="162" />
     </property>
     <property name="candidateInscriber">
       <column name="candidate_inscriber" sql-type="VARCHAR(66)" />
