@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: test
+    active: mainnet
 
   main:
     allow-bean-definition-overriding: true
