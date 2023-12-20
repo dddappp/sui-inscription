@@ -13,6 +13,15 @@ echo "slot_object_id: $slot_object_id"
 round=0
 echo "current round: $round"
 
+round_in_slot=$(sui client object $slot_object_id --json | jq -r '.content.fields.round')
+echo "round_in_slot: $round_in_slot"
+
+if [[ $round != $round_in_slot ]]
+then
+echo "current round != round_in_slot, ignore current round: $round"
+continue
+fi
+
 mint_count=0
 while [ $mint_count -lt 1 ]
 do
