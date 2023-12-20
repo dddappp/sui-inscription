@@ -1,11 +1,14 @@
 #[allow(unused_variable, unused_use, unused_assignment, unused_mut_parameter)]
 module sui_inscription::slot_put_up_candidate_logic {
+    use std::hash::sha3_256;
     use std::vector;
 
+    use sui::bcs;
     use sui::clock;
     use sui::clock::Clock;
     use sui::tx_context::TxContext;
 
+    use sui_inscription::byte_util;
     use sui_inscription::candidate_inscription_put_up;
     use sui_inscription::diff;
     use sui_inscription::id_util;
@@ -84,8 +87,8 @@ module sui_inscription::slot_put_up_candidate_logic {
         };
 
         let candidate_difference = diff::calculate_difference(
-            qualified_hash,
-            candidate_hash,
+            sha3_256(byte_util::concat(&qualified_hash, bcs::to_bytes(&slot::qualified_inscription_id(slot)))),
+            sha3_256(byte_util::concat(&candidate_hash, bcs::to_bytes(&inscription::id(candidate_inscription)))),
             qualified_elapsed_time,
             candidate_elapsed_time
         );

@@ -2,3 +2,4 @@ Move.lock
 sui-contracts/build
 sui-java-service/*/target
 sui-java-service/scripts
+test_*.json
