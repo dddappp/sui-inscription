@@ -15,6 +15,9 @@ aggregates:
     properties:
       Hash:
         type: vector<u8>
+        hibernateMappingType: IntArrayString
+        #hibernateMappingType: "org.dddappp.suiinscription.domain.hibernate.IntArrayStringType"
+        columnLength: 162
       SlotNumber:
         type: u8
       Round:
@@ -79,6 +82,8 @@ aggregates:
         type: ID
       InscriptionHash:
         type: vector<u8>
+        hibernateMappingType: IntArrayString
+        columnLength: 162
       SlotNumber:
         type: u8
       Round:
@@ -149,6 +154,8 @@ aggregates:
       QualifiedHash:
         type: vector<u8>
         description: previous qualified inscription hash.
+        hibernateMappingType: IntArrayString
+        columnLength: 162
       QualifiedTimestamp:
         type: u64
         description: previous qualified inscription timestamp.
@@ -161,6 +168,8 @@ aggregates:
       CandidateHash:
         type: vector<u8>
         description: candidate inscription hash.
+        hibernateMappingType: IntArrayString
+        columnLength: 162
       CandidateInscriber:
         type: address
       CandidateTimestamp:
@@ -242,8 +251,9 @@ aggregates:
             Round:
               type: u64
 
-#configuration:
-#  hibernate:
-#    hibernateTypes:
-#      IntArray:
-#        mappingType: "org.dddappp.suiinscription.domain.hibernate.IntArrayStringType"
+configuration:
+  sequenceNumber: 1000
+  hibernate:
+    hibernateTypes:
+      IntArrayString:
+        mappingType: "org.dddappp.suiinscription.domain.hibernate.IntArrayStringType"
