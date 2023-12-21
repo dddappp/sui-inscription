@@ -4,3 +4,4 @@ sui-java-service/*/target
 sui-java-service/scripts
 test_*.json
 temp_test.sh
+slot_object_*.json

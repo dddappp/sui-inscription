@@ -13,14 +13,39 @@ echo "slot_object_id: $slot_object_id"
 round=0
 echo "current round: $round"
 
-round_in_slot=$(sui client object $slot_object_id --json | jq -r '.content.fields.round')
-echo "round_in_slot: $round_in_slot"
+sui client object $slot_object_id --json > slot_object_temp.json
+round_of_slot=$(cat slot_object_temp.json | jq -r '.content.fields.round')
+echo "round_of_slot: $round_of_slot"
+genesis_timestamp_of_slot=$(cat slot_object_temp.json | jq -r '.content.fields.genesis_timestamp')
+echo "genesis_timestamp_of_slot: $genesis_timestamp_of_slot"
+candidate_inscription_id=$(cat slot_object_temp.json | jq -r '.content.fields.candidate_inscription_id')
+echo "candidate_inscription_id: $candidate_inscription_id"
+inscription_id_holder=0x646464615050502d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d
 
-if [[ $round != $round_in_slot ]]
+if [[ $round != $round_of_slot ]]
 then
-echo "current round != round_in_slot, ignore current round: $round"
+echo "current round != round_of_slot, ignore current round: $round"
 continue
 fi
+
+two_and_a_half_minutes_in_ms=150000
+current_time_in_ms=$(($(date +%s)*1000))
+echo "current_time_in_ms: $current_time_in_ms"
+round_of_slot_ended_at=$((genesis_timestamp_of_slot + two_and_a_half_minutes_in_ms * (round_of_slot + 1)))
+
+if [ $candidate_inscription_id != $inscription_id_holder ]; then
+echo "candidate_inscription_id != inscription_id_holder"
+if [ $current_time_in_ms -gt $round_of_slot_ended_at ]; then
+echo "current_time_in_ms > round_of_slot_ended_at, advance round"
+
+sui client call --package $package_id --module slot_aggregate --function advance \
+--args $slot_object_id \"0x6\" \
+--gas-budget 1000000000
+
+fi
+continue
+fi
+
 
 mint_count=0
 while [ $mint_count -lt 1 ]
@@ -45,11 +70,6 @@ sui client call --package $package_id --module slot_aggregate --function put_up_
 
 mint_count=$((mint_count+1))
 done
-
-#sleep 150
-sui client call --package $package_id --module slot_aggregate --function advance \
---args $slot_object_id \"0x6\" \
---gas-budget 1000000000
 
 round=$((round+1))
 
