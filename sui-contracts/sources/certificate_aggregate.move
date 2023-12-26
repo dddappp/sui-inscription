@@ -12,7 +12,7 @@ module sui_inscription::certificate_aggregate {
 
     friend sui_inscription::slot_advance_logic;
 
-    public entry fun issue(
+    public(friend) fun issue(
         inscription_id: ID,
         inscription_hash: vector<u8>,
         slot_number: u8,

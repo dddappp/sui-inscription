@@ -19,6 +19,8 @@ public interface InscriptionAggregate {
 
     void mint(Integer slotNumber, BigInteger round, BigInteger amount, BigInteger nonce, String content, String clock, Long offChainVersion, String commandId, String requesterId, InscriptionCommands.Mint c);
 
+    void mintV2(Integer slotNumber, BigInteger round, BigInteger amount, BigInteger nonce, String content, String clock, Long offChainVersion, String commandId, String requesterId, InscriptionCommands.MintV2 c);
+
     void delete(Long offChainVersion, String commandId, String requesterId, InscriptionCommands.Delete c);
 
     void throwOnInvalidStateTransition(Command c);

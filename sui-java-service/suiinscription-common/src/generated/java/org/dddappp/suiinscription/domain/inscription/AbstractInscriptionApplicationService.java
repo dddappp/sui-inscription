@@ -54,6 +54,10 @@ public abstract class AbstractInscriptionApplicationService implements Inscripti
         update(c, ar -> ar.mint(c.getSlotNumber(), c.getRound(), c.getAmount(), c.getNonce(), c.getContent(), c.getClock(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
     }
 
+    public void when(InscriptionCommands.MintV2 c) {
+        update(c, ar -> ar.mintV2(c.getSlotNumber(), c.getRound(), c.getAmount(), c.getNonce(), c.getContent(), c.getClock(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
+    }
+
     public void when(InscriptionCommands.Delete c) {
         update(c, ar -> ar.delete(c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
     }

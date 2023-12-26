@@ -12,6 +12,14 @@ sui client call --package _PACKAGE_ID_ --module inscription_aggregate --function
 --gas-budget 100000
 ```
 
+### MintV2 method
+
+```shell
+sui client call --package _PACKAGE_ID_ --module inscription_aggregate --function mint_v2 \
+--args u8_slot_number \"u64_round\" \"u64_amount\" \"u128_nonce\" '"string_content"' \"_CLOCK_OBJECT_ID_\" \
+--gas-budget 100000
+```
+
 ### Delete method
 
 ```shell

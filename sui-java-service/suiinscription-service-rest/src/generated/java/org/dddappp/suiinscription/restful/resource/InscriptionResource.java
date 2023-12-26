@@ -189,6 +189,24 @@ public class InscriptionResource {
     }
 
 
+    @PutMapping("{id}/_commands/MintV2")
+    public void mintV2(@PathVariable("id") String id, @RequestBody InscriptionCommands.MintV2 content) {
+        try {
+
+            InscriptionCommands.MintV2 cmd = content;//.toMintV2();
+            String idObj = id;
+            if (cmd.getId() == null) {
+                cmd.setId(idObj);
+            } else if (!cmd.getId().equals(idObj)) {
+                throw DomainError.named("inconsistentId", "Argument Id %1$s NOT equals body Id %2$s", id, cmd.getId());
+            }
+            cmd.setRequesterId(SecurityContextUtil.getRequesterId());
+            inscriptionApplicationService.when(cmd);
+
+        } catch (Exception ex) { logger.info(ex.getMessage(), ex); throw DomainErrorUtils.convertException(ex); }
+    }
+
+
     @PutMapping("{id}/_commands/Delete")
     public void delete(@PathVariable("id") String id, @RequestBody InscriptionCommands.Delete content) {
         try {

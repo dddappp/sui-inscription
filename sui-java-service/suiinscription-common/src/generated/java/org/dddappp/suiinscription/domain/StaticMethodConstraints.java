@@ -28,6 +28,14 @@ public class StaticMethodConstraints {
 
 
         ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddappp.suiinscription.domain.inscription.MintV2Logic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, InscriptionState.class, Integer.class, BigInteger.class, BigInteger.class, BigInteger.class, String.class, VerificationContext.class},
+                    new String[]{"_", "_", "slotNumber", "round", "amount", "nonce", "content"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddappp.suiinscription.domain.inscription.DeleteLogic",
                     "verify",
                     new Class[]{java.util.function.Supplier.class, InscriptionState.class, VerificationContext.class},
@@ -69,6 +77,14 @@ public class StaticMethodConstraints {
 
         ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddappp.suiinscription.domain.inscription.MintLogic",
+                    "mutate",
+                    new Class[]{InscriptionState.class, Integer.class, BigInteger.class, BigInteger.class, BigInteger.class, String.class, String.class, BigInteger.class, int[].class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "slotNumber", "round", "amount", "nonce", "content", "inscriber", "timestamp", "hash", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "status"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddappp.suiinscription.domain.inscription.MintV2Logic",
                     "mutate",
                     new Class[]{InscriptionState.class, Integer.class, BigInteger.class, BigInteger.class, BigInteger.class, String.class, String.class, BigInteger.class, int[].class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
                     new String[]{"_", "slotNumber", "round", "amount", "nonce", "content", "inscriber", "timestamp", "hash", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "status"}

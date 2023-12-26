@@ -10,6 +10,7 @@ module sui_inscription::inscription_aggregate {
     use sui_inscription::inscription;
     use sui_inscription::inscription_delete_logic;
     use sui_inscription::inscription_mint_logic;
+    use sui_inscription::inscription_mint_v2_logic;
 
     public entry fun mint(
         slot_number: u8,
@@ -36,6 +37,33 @@ module sui_inscription::inscription_aggregate {
         inscription::set_inscription_minted_id(&mut inscription_minted, inscription::id(&inscription));
         inscription::transfer_object(inscription, tx_context::sender(ctx));
         inscription::emit_inscription_minted(inscription_minted);
+    }
+
+    public(friend) fun mint_v2(
+        slot_number: u8,
+        round: u64,
+        amount: u64,
+        nonce: u128,
+        content: String,
+        clock: &Clock,
+        ctx: &mut tx_context::TxContext,
+    ): inscription::Inscription {
+        let inscription_minted = inscription_mint_v2_logic::verify(
+            slot_number,
+            round,
+            amount,
+            nonce,
+            content,
+            clock,
+            ctx,
+        );
+        let inscription = inscription_mint_v2_logic::mutate(
+            &inscription_minted,
+            ctx,
+        );
+        inscription::set_inscription_minted_id(&mut inscription_minted, inscription::id(&inscription));
+        inscription::emit_inscription_minted(inscription_minted);
+        inscription
     }
 
     public entry fun delete(

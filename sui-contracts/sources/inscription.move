@@ -11,6 +11,7 @@ module sui_inscription::inscription {
     use sui::transfer;
     use sui::tx_context::TxContext;
     friend sui_inscription::inscription_mint_logic;
+    friend sui_inscription::inscription_mint_v2_logic;
     friend sui_inscription::inscription_delete_logic;
     friend sui_inscription::inscription_aggregate;
 

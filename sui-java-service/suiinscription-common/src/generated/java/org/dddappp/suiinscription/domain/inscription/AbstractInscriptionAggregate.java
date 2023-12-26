@@ -60,6 +60,19 @@ public abstract class AbstractInscriptionAggregate extends AbstractAggregate imp
         }
 
         @Override
+        public void mintV2(Integer slotNumber, BigInteger round, BigInteger amount, BigInteger nonce, String content, String clock, Long offChainVersion, String commandId, String requesterId, InscriptionCommands.MintV2 c) {
+            java.util.function.Supplier<InscriptionEvent.InscriptionMinted> eventFactory = () -> newInscriptionMinted(slotNumber, round, amount, nonce, content, clock, offChainVersion, commandId, requesterId);
+            InscriptionEvent.InscriptionMinted e;
+            try {
+                e = verifyMintV2(eventFactory, slotNumber, round, amount, nonce, content, c);
+            } catch (Exception ex) {
+                throw new DomainError("VerificationFailed", ex);
+            }
+
+            apply(e);
+        }
+
+        @Override
         public void delete(Long offChainVersion, String commandId, String requesterId, InscriptionCommands.Delete c) {
             java.util.function.Supplier<InscriptionEvent.InscriptionDeleted> eventFactory = () -> newInscriptionDeleted(offChainVersion, commandId, requesterId);
             InscriptionEvent.InscriptionDeleted e;
@@ -89,6 +102,31 @@ public abstract class AbstractInscriptionAggregate extends AbstractAggregate imp
 //package org.dddappp.suiinscription.domain.inscription;
 //
 //public class MintLogic {
+//    public static InscriptionEvent.InscriptionMinted verify(java.util.function.Supplier<InscriptionEvent.InscriptionMinted> eventFactory, InscriptionState inscriptionState, Integer slotNumber, BigInteger round, BigInteger amount, BigInteger nonce, String content, VerificationContext verificationContext) {
+//    }
+//}
+
+            return e;
+        }
+           
+
+        protected InscriptionEvent.InscriptionMinted verifyMintV2(java.util.function.Supplier<InscriptionEvent.InscriptionMinted> eventFactory, Integer slotNumber, BigInteger round, BigInteger amount, BigInteger nonce, String content, InscriptionCommands.MintV2 c) {
+            Integer SlotNumber = slotNumber;
+            BigInteger Round = round;
+            BigInteger Amount = amount;
+            BigInteger Nonce = nonce;
+            String Content = content;
+
+            InscriptionEvent.InscriptionMinted e = (InscriptionEvent.InscriptionMinted) ReflectUtils.invokeStaticMethod(
+                    "org.dddappp.suiinscription.domain.inscription.MintV2Logic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, InscriptionState.class, Integer.class, BigInteger.class, BigInteger.class, BigInteger.class, String.class, VerificationContext.class},
+                    new Object[]{eventFactory, getState(), slotNumber, round, amount, nonce, content, VerificationContext.forCommand(c)}
+            );
+
+//package org.dddappp.suiinscription.domain.inscription;
+//
+//public class MintV2Logic {
 //    public static InscriptionEvent.InscriptionMinted verify(java.util.function.Supplier<InscriptionEvent.InscriptionMinted> eventFactory, InscriptionState inscriptionState, Integer slotNumber, BigInteger round, BigInteger amount, BigInteger nonce, String content, VerificationContext verificationContext) {
 //    }
 //}

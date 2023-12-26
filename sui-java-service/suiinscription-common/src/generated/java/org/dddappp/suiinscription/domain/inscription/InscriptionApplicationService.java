@@ -17,6 +17,8 @@ import org.dddappp.suiinscription.domain.Command;
 public interface InscriptionApplicationService {
     void when(InscriptionCommands.Mint c);
 
+    void when(InscriptionCommands.MintV2 c);
+
     void when(InscriptionCommands.Delete c);
 
     InscriptionState get(String id);
