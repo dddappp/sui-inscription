@@ -142,9 +142,9 @@ aggregates:
       #  #type: CertificateType
     methods:
       Issue:
+        isInternal: true
         event:
           name: CertificateIssued
-          isInternal: true
           #isObjectShared: true
           #isObjectFrozen: true
           properties:

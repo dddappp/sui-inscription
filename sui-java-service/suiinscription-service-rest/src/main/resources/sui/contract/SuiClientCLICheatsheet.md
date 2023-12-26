@@ -30,14 +30,6 @@ sui client call --package _PACKAGE_ID_ --module inscription_aggregate --function
 
 ## Certificate aggregate
 
-### Issue method
-
-```shell
-sui client call --package _PACKAGE_ID_ --module certificate_aggregate --function issue \
---args id_inscription_id \"vector_u8_inscription_hash\" u8_slot_number \"u64_round\" address_inscriber \"u64_inscription_timestamp\" \"u64_amount\" \"u128_inscription_nonce\" '"string_inscription_content"' \
---gas-budget 100000
-```
-
 ## Slot aggregate
 
 ### Create method
