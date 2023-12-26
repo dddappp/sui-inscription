@@ -14,8 +14,8 @@ import org.dddappp.suiinscription.domain.inscription.AbstractInscriptionEvent;
 import org.dddappp.suiinscription.sui.contract.ContractConstants;
 import org.dddappp.suiinscription.sui.contract.DomainBeanUtils;
 import org.dddappp.suiinscription.sui.contract.SuiPackage;
-import org.dddappp.suiinscription.sui.contract.inscription.InscriptionMinted;
 import org.dddappp.suiinscription.sui.contract.inscription.InscriptionDeleted;
+import org.dddappp.suiinscription.sui.contract.inscription.InscriptionMinted;
 import org.dddappp.suiinscription.sui.contract.repository.InscriptionEventRepository;
 import org.dddappp.suiinscription.sui.contract.repository.SuiPackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,46 +51,6 @@ public class InscriptionEventService {
     public void updateStatusToProcessed(AbstractInscriptionEvent event) {
         event.setStatus("D");
         inscriptionEventRepository.save(event);
-    }
-
-    @Transactional
-    public void pullInscriptionMintedEvents() {
-        String packageId = getDefaultSuiPackageId();
-        if (packageId == null) {
-            return;
-        }
-        int limit = 1;
-        EventId cursor = getInscriptionMintedEventNextCursor();
-        while (true) {
-            PaginatedMoveEvents<InscriptionMinted> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.INSCRIPTION_MODULE_INSCRIPTION_MINTED,
-                    cursor, limit, false, InscriptionMinted.class);
-
-            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
-                cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<InscriptionMinted> eventEnvelope : eventPage.getData()) {
-                    saveInscriptionMinted(eventEnvelope);
-                }
-            } else {
-                break;
-            }
-            if (!Page.hasNextPage(eventPage)) {
-                break;
-            }
-        }
-    }
-
-    private EventId getInscriptionMintedEventNextCursor() {
-        AbstractInscriptionEvent lastEvent = inscriptionEventRepository.findFirstInscriptionMintedByOrderBySuiTimestampDesc();
-        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
-    }
-
-    private void saveInscriptionMinted(SuiMoveEventEnvelope<InscriptionMinted> eventEnvelope) {
-        AbstractInscriptionEvent.InscriptionMinted inscriptionMinted = DomainBeanUtils.toInscriptionMinted(eventEnvelope);
-        if (inscriptionEventRepository.findById(inscriptionMinted.getInscriptionEventId()).isPresent()) {
-            return;
-        }
-        inscriptionEventRepository.save(inscriptionMinted);
     }
 
     @Transactional
@@ -131,6 +91,46 @@ public class InscriptionEventService {
             return;
         }
         inscriptionEventRepository.save(inscriptionDeleted);
+    }
+
+    @Transactional
+    public void pullInscriptionMintedEvents() {
+        String packageId = getDefaultSuiPackageId();
+        if (packageId == null) {
+            return;
+        }
+        int limit = 1;
+        EventId cursor = getInscriptionMintedEventNextCursor();
+        while (true) {
+            PaginatedMoveEvents<InscriptionMinted> eventPage = suiJsonRpcClient.queryMoveEvents(
+                    packageId + "::" + ContractConstants.INSCRIPTION_MODULE_INSCRIPTION_MINTED,
+                    cursor, limit, false, InscriptionMinted.class);
+
+            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
+                cursor = eventPage.getNextCursor();
+                for (SuiMoveEventEnvelope<InscriptionMinted> eventEnvelope : eventPage.getData()) {
+                    saveInscriptionMinted(eventEnvelope);
+                }
+            } else {
+                break;
+            }
+            if (!Page.hasNextPage(eventPage)) {
+                break;
+            }
+        }
+    }
+
+    private EventId getInscriptionMintedEventNextCursor() {
+        AbstractInscriptionEvent lastEvent = inscriptionEventRepository.findFirstInscriptionMintedByOrderBySuiTimestampDesc();
+        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
+    }
+
+    private void saveInscriptionMinted(SuiMoveEventEnvelope<InscriptionMinted> eventEnvelope) {
+        AbstractInscriptionEvent.InscriptionMinted inscriptionMinted = DomainBeanUtils.toInscriptionMinted(eventEnvelope);
+        if (inscriptionEventRepository.findById(inscriptionMinted.getInscriptionEventId()).isPresent()) {
+            return;
+        }
+        inscriptionEventRepository.save(inscriptionMinted);
     }
 
 

@@ -126,9 +126,6 @@ public abstract class AbstractInscriptionAggregate extends AbstractAggregate imp
             e.setAmount(amount);
             e.setNonce(nonce);
             e.setContent(content);
-            e.setInscriber(null);
-            e.setTimestamp(null);
-            e.setHash(null);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);

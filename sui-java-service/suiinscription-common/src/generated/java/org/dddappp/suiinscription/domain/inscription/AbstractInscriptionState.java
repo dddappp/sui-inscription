@@ -249,8 +249,6 @@ public abstract class AbstractInscriptionState implements InscriptionState.SqlIn
         setStateReadOnly(false);
         if (false) { 
             ;
-        } else if (e instanceof AbstractInscriptionEvent.InscriptionMinted) {
-            when((AbstractInscriptionEvent.InscriptionMinted)e);
         } else if (e instanceof AbstractInscriptionEvent.InscriptionDeleted) {
             when((AbstractInscriptionEvent.InscriptionDeleted)e);
         } else {
@@ -272,69 +270,6 @@ public abstract class AbstractInscriptionState implements InscriptionState.SqlIn
         this.setContent(s.getContent());
         this.setVersion(s.getVersion());
         this.setActive(s.getActive());
-    }
-
-    public void when(AbstractInscriptionEvent.InscriptionMinted e) {
-        throwOnWrongEvent(e);
-
-        Integer slotNumber = e.getSlotNumber();
-        Integer SlotNumber = slotNumber;
-        BigInteger round = e.getRound();
-        BigInteger Round = round;
-        BigInteger amount = e.getAmount();
-        BigInteger Amount = amount;
-        BigInteger nonce = e.getNonce();
-        BigInteger Nonce = nonce;
-        String content = e.getContent();
-        String Content = content;
-        String inscriber = e.getInscriber();
-        String Inscriber = inscriber;
-        BigInteger timestamp = e.getTimestamp();
-        BigInteger Timestamp = timestamp;
-        int[] hash = e.getHash();
-        int[] Hash = hash;
-        Long suiTimestamp = e.getSuiTimestamp();
-        Long SuiTimestamp = suiTimestamp;
-        String suiTxDigest = e.getSuiTxDigest();
-        String SuiTxDigest = suiTxDigest;
-        BigInteger suiEventSeq = e.getSuiEventSeq();
-        BigInteger SuiEventSeq = suiEventSeq;
-        String suiPackageId = e.getSuiPackageId();
-        String SuiPackageId = suiPackageId;
-        String suiTransactionModule = e.getSuiTransactionModule();
-        String SuiTransactionModule = suiTransactionModule;
-        String suiSender = e.getSuiSender();
-        String SuiSender = suiSender;
-        String suiType = e.getSuiType();
-        String SuiType = suiType;
-        String status = e.getStatus();
-        String Status = status;
-
-        if (this.getCreatedBy() == null){
-            this.setCreatedBy(e.getCreatedBy());
-        }
-        if (this.getCreatedAt() == null){
-            this.setCreatedAt(e.getCreatedAt());
-        }
-        this.setUpdatedBy(e.getCreatedBy());
-        this.setUpdatedAt(e.getCreatedAt());
-
-        InscriptionState updatedInscriptionState = (InscriptionState) ReflectUtils.invokeStaticMethod(
-                    "org.dddappp.suiinscription.domain.inscription.MintLogic",
-                    "mutate",
-                    new Class[]{InscriptionState.class, Integer.class, BigInteger.class, BigInteger.class, BigInteger.class, String.class, String.class, BigInteger.class, int[].class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new Object[]{this, slotNumber, round, amount, nonce, content, inscriber, timestamp, hash, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, status, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
-            );
-
-//package org.dddappp.suiinscription.domain.inscription;
-//
-//public class MintLogic {
-//    public static InscriptionState mutate(InscriptionState inscriptionState, Integer slotNumber, BigInteger round, BigInteger amount, BigInteger nonce, String content, String inscriber, BigInteger timestamp, int[] hash, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<InscriptionState, InscriptionState.MutableInscriptionState> mutationContext) {
-//    }
-//}
-
-        if (this != updatedInscriptionState) { merge(updatedInscriptionState); } //else do nothing
-
     }
 
     public void when(AbstractInscriptionEvent.InscriptionDeleted e) {

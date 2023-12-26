@@ -70,8 +70,8 @@ public class StaticMethodConstraints {
         ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddappp.suiinscription.domain.inscription.MintLogic",
                     "mutate",
-                    new Class[]{InscriptionState.class, Integer.class, BigInteger.class, BigInteger.class, BigInteger.class, String.class, String.class, BigInteger.class, int[].class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new String[]{"_", "slotNumber", "round", "amount", "nonce", "content", "inscriber", "timestamp", "hash", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "status"}
+                    new Class[]{InscriptionState.class, Integer.class, BigInteger.class, BigInteger.class, BigInteger.class, String.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "slotNumber", "round", "amount", "nonce", "content", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "status"}
             );
 
 

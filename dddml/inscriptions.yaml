@@ -33,6 +33,18 @@ aggregates:
       Content:
         type: String
         length: 1000
+    eventObjects:
+      InscriptionMinted:
+        properties:
+          Inscriber:
+            type: address
+            sequenceNumber: 100
+          Timestamp:
+            type: u64
+            sequenceNumber: 101
+          Hash:
+            type: vector<u8>
+            sequenceNumber: 102
     methods:
       Mint:
         isCreationCommand: true
@@ -53,15 +65,18 @@ aggregates:
             isIgnoredInEvent: true
         event:
           name: InscriptionMinted
+          type: InscriptionMinted
+          #discriminatorValue: 0
           #isObjectShared: true
           #isObjectFrozen: true
-          properties:
-            Inscriber:
-              type: address
-            Timestamp:
-              type: u64
-            Hash:
-              type: vector<u8>
+#          properties:
+#            Inscriber:
+#              type: address
+#            Timestamp:
+#              type: u64
+#            Hash:
+#              type: vector<u8>
+
 
   Certificate:
     metadata:

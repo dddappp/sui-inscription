@@ -212,6 +212,15 @@ public abstract class AbstractInscriptionEvent extends AbstractEvent implements 
 
     }
 
+    public static class InscriptionDeleted extends InscriptionClobEvent implements InscriptionEvent.InscriptionDeleted {
+
+        @Override
+        public String getEventType() {
+            return "InscriptionDeleted";
+        }
+
+    }
+
     public static class InscriptionMinted extends InscriptionClobEvent implements InscriptionEvent.InscriptionMinted {
 
         @Override
@@ -313,15 +322,6 @@ public abstract class AbstractInscriptionEvent extends AbstractEvent implements 
 
         public void setHash(int[] value) {
             getDynamicProperties().put("hash", value);
-        }
-
-    }
-
-    public static class InscriptionDeleted extends InscriptionClobEvent implements InscriptionEvent.InscriptionDeleted {
-
-        @Override
-        public String getEventType() {
-            return "InscriptionDeleted";
         }
 
     }

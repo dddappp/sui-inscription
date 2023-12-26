@@ -21,6 +21,9 @@ public interface InscriptionEvent extends Event, SuiEventEnvelope, SuiMoveEvent,
         void setEventReadOnly(boolean readOnly);
     }
 
+    interface InscriptionDeleted extends InscriptionEvent {
+    }
+
     interface InscriptionMinted extends InscriptionEvent {
         Integer getSlotNumber();
 
@@ -54,9 +57,6 @@ public interface InscriptionEvent extends Event, SuiEventEnvelope, SuiMoveEvent,
 
         void setHash(int[] value);
 
-    }
-
-    interface InscriptionDeleted extends InscriptionEvent {
     }
 
     String getId();

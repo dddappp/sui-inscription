@@ -5,12 +5,12 @@
 
 module sui_inscription::inscription_minted {
 
-    use std::option;
+    use std::option::Option;
     use std::string::String;
-    use sui::object;
+    use sui::object::ID;
     use sui_inscription::inscription::{Self, InscriptionMinted};
 
-    public fun id(inscription_minted: &InscriptionMinted): option::Option<object::ID> {
+    public fun id(inscription_minted: &InscriptionMinted): Option<ID> {
         inscription::inscription_minted_id(inscription_minted)
     }
 
