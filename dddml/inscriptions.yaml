@@ -71,6 +71,7 @@ aggregates:
               type: vector<u8>
               sequenceNumber: 102
       MintV2:
+        isInternal: true
         isCreationCommand: true
         parameters:
           SlotNumber:
@@ -87,6 +88,8 @@ aggregates:
           Clock:
             referenceType: Clock
             isIgnoredInEvent: true
+        result:
+          isObjectReturned: true
         event:
           name: InscriptionMinted
           type: InscriptionMinted
