@@ -5,9 +5,12 @@
 
 module sui_inscription::slot_service {
     use std::string::String;
+    use sui::clock;
 
     use sui::clock::Clock;
     use sui::tx_context;
+    use sui_inscription::id_util;
+    use sui_inscription::time_util;
 
     use sui_inscription::inscription;
     use sui_inscription::inscription::Inscription;
@@ -46,5 +49,21 @@ module sui_inscription::slot_service {
         );
         slot_aggregate::put_up_candidate(slot, &inscription, clock, ctx);
         inscription::transfer_object(inscription, tx_context::sender(ctx));
+    }
+
+    public entry fun advance_and_mint_and_put_up_candidate(
+        slot: &mut slot::Slot,
+        amount: u64,
+        nonce: u128,
+        content: String,
+        clock: &Clock,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        let round = slot::round(slot);
+        let due_rounds = time_util::count_rounds(slot::genesis_timestamp(slot), clock::timestamp_ms(clock));
+        if (due_rounds > round && id_util::id_placeholder() != slot::candidate_inscription_id(slot)) {
+            slot_aggregate::advance(slot, clock, ctx);
+        };
+        mint_and_put_up_candidate(slot, amount, nonce, content, clock, ctx);
     }
 }
