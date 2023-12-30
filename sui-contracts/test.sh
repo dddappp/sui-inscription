@@ -33,6 +33,10 @@ sui client call --package $package_id --module inscription_aggregate --function 
 --args $slot_number \"$round\" \"11111111\" \"11111111\" '"hello-world!"' \"0x6\" \
 --gas-budget 1000000000 --json > test_minted_inscription.json
 
+#sui client call --package $package_id --module slot_service --function advance_and_mint_and_put_up_candidate \
+#--args $slot_object_id \"11111111\" \"11111111\" '"hello-world!"' \"0x6\" \
+#--gas-budget 1000000000 --json > test_minted_inscription.json
+
 minted_inscription_id=$(cat test_minted_inscription.json | jq -r '.objectChanges[] | select(.type == "created") | select(.objectType | test("::inscription::Inscription")).objectId')
 echo "minted_inscription_id: $minted_inscription_id"
 

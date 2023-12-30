@@ -79,6 +79,12 @@ sui client call --package {PACKAGE_ID} --module slot_service --function advance_
 --args 0x2647f0df047e63aeca26200c820dd884657ae1711815c8f1448ee2a3e1cd3724 \"0xf28ae48d8dd26569d898a5462f5d7782685e6b632a4aaf27dedc0ef3998a5ddd\" \"0x6\" \
 --gas-budget 1000000000
 
+
+# You could even combine `advance` and `mint` and `put_up_candidate` into one step:
+sui client call --package 0x74780db27ddf1426fa1f2464914c523b79b7a9c3f1020bbf16f37a7ee029609f --module slot_service --function advance_and_mint_and_put_up_candidate \
+--args 0x4686acd97972122e8c8e2f6e73bf5fbbfbbb649152fb55eae31f4542c751dffe \"11111111\" \"11111111\" '"hello-world!"' \"0x6\" \
+--gas-budget 1000000000
+
 ```
 
 
