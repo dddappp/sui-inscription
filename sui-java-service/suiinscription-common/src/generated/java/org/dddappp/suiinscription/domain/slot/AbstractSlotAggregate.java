@@ -182,6 +182,7 @@ public abstract class AbstractSlotAggregate extends AbstractAggregate implements
             e.setCandidateNonce(null);
             e.setCandidateDifference(null);
             e.setCandidateContent(null);
+            e.setSuccessful(null);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);

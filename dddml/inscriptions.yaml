@@ -9,6 +9,8 @@ aggregates:
       #CRUD_IT_NO_DELETE: true
       #CRUD_IT_CREATE_METHOD_NAME: Mint
       #MOVE_NO_VERSION_PROPERTY: true
+    friends:
+      - SlotService
     id:
       name: Id
       type: UID
@@ -274,6 +276,8 @@ aggregates:
             CandidateContent:
               type: String
               length: 1000
+            Successful:
+              type: bool
 
       Advance:
         description: advance it to the next round.

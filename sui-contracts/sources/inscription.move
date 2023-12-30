@@ -15,6 +15,8 @@ module sui_inscription::inscription {
     friend sui_inscription::inscription_delete_logic;
     friend sui_inscription::inscription_aggregate;
 
+    friend sui_inscription::slot_service;
+
     #[allow(unused_const)]
     const EDataTooLong: u64 = 102;
     const EInappropriateVersion: u64 = 103;

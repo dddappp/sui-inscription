@@ -370,6 +370,18 @@ public abstract class AbstractSlotEvent extends AbstractEvent implements SlotEve
             getDynamicProperties().put("candidateContent", value);
         }
 
+        public Boolean getSuccessful() {
+            Object val = getDynamicProperties().get("successful");
+            if (val instanceof Boolean) {
+                return (Boolean) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Boolean.class);
+        }
+
+        public void setSuccessful(Boolean value) {
+            getDynamicProperties().put("successful", value);
+        }
+
     }
 
     public static class SlotAdvanced extends SlotClobEvent implements SlotEvent.SlotAdvanced {

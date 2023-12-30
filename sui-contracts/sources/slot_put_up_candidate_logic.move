@@ -20,7 +20,7 @@ module sui_inscription::slot_put_up_candidate_logic {
 
     const EInvalidRound: u64 = 100;
     const EInvalidSlotNumber: u64 = 101;
-    const EInvalidCandidateDifference: u64 = 102;
+    //const EInvalidCandidateDifference: u64 = 102;
     const EInvalidAmount: u64 = 103;
     const ENeedToAdvanceRound: u64 = 104;
     const EJumpedTheGun: u64 = 105;
@@ -94,31 +94,50 @@ module sui_inscription::slot_put_up_candidate_logic {
         );
 
         let idle_rounds = if (due_rounds > round) { due_rounds - round } else { 0 };
+        let is_successful: bool;
         if (slot::candidate_inscription_id(slot) == id_util::id_placeholder()) {
             //compare with the qualified inscription
-            assert!(diff::major_difference_equals_or_less_than(candidate_difference,
-                qualified_difference + idle_rounds * MAJOR_DIFFERENCE_SCALE_FACTOR), EInvalidCandidateDifference);
+            //assert!(
+            is_successful = diff::major_difference_equals_or_less_than(candidate_difference,
+                qualified_difference + idle_rounds * MAJOR_DIFFERENCE_SCALE_FACTOR);//, EInvalidCandidateDifference);
         } else {
             //compare with existing candidate inscription
-            assert!(
-                candidate_difference < slot::candidate_difference(slot) + idle_rounds * MAJOR_DIFFERENCE_SCALE_FACTOR,
-                EInvalidCandidateDifference
-            );
+            //assert!(
+            is_successful = candidate_difference < slot::candidate_difference(
+                slot
+            ) + idle_rounds * MAJOR_DIFFERENCE_SCALE_FACTOR;//, EInvalidCandidateDifference);
         };
 
-        let candidate_inscription_id = inscription::id(candidate_inscription);
-        slot::new_candidate_inscription_put_up(
-            slot,
-            candidate_inscription_id,
-            round,
-            inscription::hash(candidate_inscription),
-            inscription::inscriber(candidate_inscription),
-            inscription::timestamp(candidate_inscription),
-            inscription::amount(candidate_inscription),
-            inscription::nonce(candidate_inscription),
-            candidate_difference,
-            inscription::content(candidate_inscription),
-        )
+        if (is_successful) {
+            let candidate_inscription_id = inscription::id(candidate_inscription);
+            slot::new_candidate_inscription_put_up(
+                slot,
+                candidate_inscription_id,
+                round,
+                inscription::hash(candidate_inscription),
+                inscription::inscriber(candidate_inscription),
+                inscription::timestamp(candidate_inscription),
+                inscription::amount(candidate_inscription),
+                inscription::nonce(candidate_inscription),
+                candidate_difference,
+                inscription::content(candidate_inscription),
+                is_successful,
+            )
+        } else {
+            slot::new_candidate_inscription_put_up(
+                slot,
+                slot::candidate_inscription_id(slot),
+                slot::round(slot),
+                slot::candidate_hash(slot),
+                slot::candidate_inscriber(slot),
+                slot::candidate_timestamp(slot),
+                slot::candidate_amount(slot),
+                slot::candidate_nonce(slot),
+                slot::candidate_difference(slot),
+                slot::candidate_content(slot),
+                is_successful,
+            )
+        }
     }
 
     public(friend) fun mutate(
@@ -126,6 +145,9 @@ module sui_inscription::slot_put_up_candidate_logic {
         slot: &mut slot::Slot,
         _ctx: &TxContext, // modify the reference to mutable if needed
     ) {
+        if (candidate_inscription_put_up::successful(candidate_inscription_put_up) == false) {
+            return
+        };
         let candidate_inscription_id = candidate_inscription_put_up::candidate_inscription_id(
             candidate_inscription_put_up
         );

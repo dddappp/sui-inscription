@@ -12,6 +12,8 @@ module sui_inscription::inscription_aggregate {
     use sui_inscription::inscription_mint_logic;
     use sui_inscription::inscription_mint_v2_logic;
 
+    friend sui_inscription::slot_service;
+
     public entry fun mint(
         slot_number: u8,
         round: u64,

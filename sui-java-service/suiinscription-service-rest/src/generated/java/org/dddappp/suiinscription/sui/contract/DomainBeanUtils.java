@@ -134,6 +134,7 @@ public class DomainBeanUtils {
         candidateInscriptionPutUp.setCandidateNonce(contractEvent.getCandidateNonce());
         candidateInscriptionPutUp.setCandidateDifference(contractEvent.getCandidateDifference());
         candidateInscriptionPutUp.setCandidateContent(contractEvent.getCandidateContent());
+        candidateInscriptionPutUp.setSuccessful(contractEvent.getSuccessful());
         candidateInscriptionPutUp.setVersion(contractEvent.getVersion());
 
         candidateInscriptionPutUp.setSuiTimestamp(eventEnvelope.getTimestampMs());

@@ -69,6 +69,10 @@ public interface SlotEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasSta
 
         void setCandidateContent(String value);
 
+        Boolean getSuccessful();
+
+        void setSuccessful(Boolean value);
+
     }
 
     interface SlotAdvanced extends SlotEvent {

@@ -1,13 +1,13 @@
 [package]
 name = "sui_inscription"
 version = "0.0.1"
-published-at = "0x776fbac3115141986702630edf576b42adbcf60dc86a56a5875703fe817b670e"
+#published-at = "0x776fbac3115141986702630edf576b42adbcf60dc86a56a5875703fe817b670e"
 
 [dependencies]
 #Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "devnet" }
 Sui = { local = "../../../MystenLabs/sui/crates/sui-framework/packages/sui-framework" }
 
 [addresses]
-sui_inscription = "0x776fbac3115141986702630edf576b42adbcf60dc86a56a5875703fe817b670e"
-#sui_inscription = "0x0"
+#sui_inscription = "0x776fbac3115141986702630edf576b42adbcf60dc86a56a5875703fe817b670e"
+sui_inscription = "0x0"
 #sui = "0000000000000000000000000000000000000000000000000000000000000002"

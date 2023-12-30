@@ -118,8 +118,8 @@ public class StaticMethodConstraints {
         ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddappp.suiinscription.domain.slot.PutUpCandidateLogic",
                     "mutate",
-                    new Class[]{SlotState.class, String.class, BigInteger.class, int[].class, String.class, BigInteger.class, BigInteger.class, BigInteger.class, BigInteger.class, String.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new String[]{"_", "candidateInscriptionId", "round", "candidateHash", "candidateInscriber", "candidateTimestamp", "candidateAmount", "candidateNonce", "candidateDifference", "candidateContent", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "status"}
+                    new Class[]{SlotState.class, String.class, BigInteger.class, int[].class, String.class, BigInteger.class, BigInteger.class, BigInteger.class, BigInteger.class, String.class, Boolean.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "candidateInscriptionId", "round", "candidateHash", "candidateInscriber", "candidateTimestamp", "candidateAmount", "candidateNonce", "candidateDifference", "candidateContent", "successful", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "status"}
             );
 
 

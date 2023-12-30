@@ -39,6 +39,8 @@ public class CandidateInscriptionPutUp {
 
     private String candidateContent;
 
+    private Boolean successful;
+
     public String getId() {
         return id;
     }
@@ -135,6 +137,14 @@ public class CandidateInscriptionPutUp {
         this.candidateContent = candidateContent;
     }
 
+    public Boolean getSuccessful() {
+        return successful;
+    }
+
+    public void setSuccessful(Boolean successful) {
+        this.successful = successful;
+    }
+
     @Override
     public String toString() {
         return "CandidateInscriptionPutUp{" +
@@ -150,6 +160,7 @@ public class CandidateInscriptionPutUp {
                 ", candidateNonce=" + candidateNonce +
                 ", candidateDifference=" + candidateDifference +
                 ", candidateContent=" + '\'' + candidateContent + '\'' +
+                ", successful=" + successful +
                 '}';
     }
 

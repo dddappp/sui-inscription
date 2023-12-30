@@ -457,6 +457,8 @@ public abstract class AbstractSlotState implements SlotState.SqlSlotState {
         BigInteger CandidateDifference = candidateDifference;
         String candidateContent = e.getCandidateContent();
         String CandidateContent = candidateContent;
+        Boolean successful = e.getSuccessful();
+        Boolean Successful = successful;
         Long suiTimestamp = e.getSuiTimestamp();
         Long SuiTimestamp = suiTimestamp;
         String suiTxDigest = e.getSuiTxDigest();
@@ -486,14 +488,14 @@ public abstract class AbstractSlotState implements SlotState.SqlSlotState {
         SlotState updatedSlotState = (SlotState) ReflectUtils.invokeStaticMethod(
                     "org.dddappp.suiinscription.domain.slot.PutUpCandidateLogic",
                     "mutate",
-                    new Class[]{SlotState.class, String.class, BigInteger.class, int[].class, String.class, BigInteger.class, BigInteger.class, BigInteger.class, BigInteger.class, String.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new Object[]{this, candidateInscriptionId, round, candidateHash, candidateInscriber, candidateTimestamp, candidateAmount, candidateNonce, candidateDifference, candidateContent, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, status, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+                    new Class[]{SlotState.class, String.class, BigInteger.class, int[].class, String.class, BigInteger.class, BigInteger.class, BigInteger.class, BigInteger.class, String.class, Boolean.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Object[]{this, candidateInscriptionId, round, candidateHash, candidateInscriber, candidateTimestamp, candidateAmount, candidateNonce, candidateDifference, candidateContent, successful, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, status, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
             );
 
 //package org.dddappp.suiinscription.domain.slot;
 //
 //public class PutUpCandidateLogic {
-//    public static SlotState mutate(SlotState slotState, String candidateInscriptionId, BigInteger round, int[] candidateHash, String candidateInscriber, BigInteger candidateTimestamp, BigInteger candidateAmount, BigInteger candidateNonce, BigInteger candidateDifference, String candidateContent, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<SlotState, SlotState.MutableSlotState> mutationContext) {
+//    public static SlotState mutate(SlotState slotState, String candidateInscriptionId, BigInteger round, int[] candidateHash, String candidateInscriber, BigInteger candidateTimestamp, BigInteger candidateAmount, BigInteger candidateNonce, BigInteger candidateDifference, String candidateContent, Boolean successful, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<SlotState, SlotState.MutableSlotState> mutationContext) {
 //    }
 //}
 
