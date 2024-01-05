@@ -234,6 +234,10 @@ module sui_inscription::slot {
         slot.candidate_content = candidate_content;
     }
 
+    public fun admin_cap(slot: &Slot): ID {
+        slot.admin_cap
+    }
+
     fun new_slot(
         slot_number: u8,
         genesis_timestamp: u64,
