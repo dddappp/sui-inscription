@@ -40,7 +40,7 @@ module sui_inscription::slot_aggregate {
         clock: &Clock,
         ctx: &mut tx_context::TxContext,
     ) {
-        slot::asssert_schema_version(slot);
+        slot::assert_schema_version(slot);
         let candidate_inscription_put_up = slot_put_up_candidate_logic::verify(
             candidate_inscription,
             clock,
@@ -61,7 +61,7 @@ module sui_inscription::slot_aggregate {
         clock: &Clock,
         ctx: &mut tx_context::TxContext,
     ) {
-        slot::asssert_schema_version(slot);
+        slot::assert_schema_version(slot);
         let slot_advanced = slot_advance_logic::verify(
             clock,
             slot,

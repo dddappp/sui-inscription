@@ -56,7 +56,7 @@ module sui_inscription::slot {
         });
     }
 
-    public fun asssert_schema_version(slot: &Slot) {
+    public fun assert_schema_version(slot: &Slot) {
         assert!(slot.schema_version == SCHEMA_VERSION, EWrongSchemaVersion);
     }
 
