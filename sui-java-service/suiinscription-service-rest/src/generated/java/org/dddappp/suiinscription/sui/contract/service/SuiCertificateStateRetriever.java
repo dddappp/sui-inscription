@@ -42,7 +42,7 @@ public class SuiCertificateStateRetriever {
 
     private CertificateState toCertificateState(Certificate certificate) {
         CertificateState.MutableCertificateState certificateState = certificateStateFactory.apply(certificate.getId().getId());
-        certificateState.setVersion(certificate.getVersion());
+        certificateState.setVersion(BigInteger.valueOf(-1));
         certificateState.setInscriptionId(certificate.getInscriptionId());
         certificateState.setInscriptionHash(certificate.getInscriptionHash());
         certificateState.setSlotNumber(certificate.getSlotNumber());

@@ -256,7 +256,7 @@ public abstract class AbstractInscriptionState implements InscriptionState.SqlIn
         }
     }
 
-    protected void merge(InscriptionState s) {
+    public void merge(InscriptionState s) {
         if (s == this) {
             return;
         }

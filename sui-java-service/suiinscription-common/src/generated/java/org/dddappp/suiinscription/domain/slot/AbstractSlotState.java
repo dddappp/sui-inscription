@@ -360,7 +360,7 @@ public abstract class AbstractSlotState implements SlotState.SqlSlotState {
         }
     }
 
-    protected void merge(SlotState s) {
+    public void merge(SlotState s) {
         if (s == this) {
             return;
         }

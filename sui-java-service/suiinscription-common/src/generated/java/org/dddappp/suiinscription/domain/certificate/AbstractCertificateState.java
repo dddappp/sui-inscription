@@ -266,7 +266,7 @@ public abstract class AbstractCertificateState implements CertificateState.SqlCe
         }
     }
 
-    protected void merge(CertificateState s) {
+    public void merge(CertificateState s) {
         if (s == this) {
             return;
         }

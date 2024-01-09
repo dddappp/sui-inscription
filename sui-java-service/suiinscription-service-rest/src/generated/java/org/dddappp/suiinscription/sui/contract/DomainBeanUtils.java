@@ -86,7 +86,7 @@ public class DomainBeanUtils {
         certificateIssued.setAmount(contractEvent.getAmount());
         certificateIssued.setInscriptionNonce(contractEvent.getInscriptionNonce());
         certificateIssued.setInscriptionContent(contractEvent.getInscriptionContent());
-        certificateIssued.setVersion(BigInteger.valueOf(-1));
+        certificateIssued.setVersion(BigInteger.valueOf(eventEnvelope.getTimestampMs()));
 
         certificateIssued.setSuiTimestamp(eventEnvelope.getTimestampMs());
         certificateIssued.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
