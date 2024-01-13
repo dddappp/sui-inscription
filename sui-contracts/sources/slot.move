@@ -20,6 +20,7 @@ module sui_inscription::slot {
     #[allow(unused_const)]
     const EDataTooLong: u64 = 102;
     const EInappropriateVersion: u64 = 103;
+    const EEmptyObjectID: u64 = 107;
 
     /// Not the right admin for the object
     const ENotAdmin: u64 = 0;
@@ -577,6 +578,7 @@ module sui_inscription::slot {
     }
 
     public(friend) fun emit_slot_created(slot_created: SlotCreated) {
+        assert!(std::option::is_some(&slot_created.id), EEmptyObjectID);
         event::emit(slot_created);
     }
 

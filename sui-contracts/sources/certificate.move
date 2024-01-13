@@ -15,6 +15,7 @@ module sui_inscription::certificate {
 
     #[allow(unused_const)]
     const EDataTooLong: u64 = 102;
+    const EEmptyObjectID: u64 = 107;
 
     struct Certificate has key, store {
         id: UID,
@@ -248,6 +249,7 @@ module sui_inscription::certificate {
     }
 
     public(friend) fun emit_certificate_issued(certificate_issued: CertificateIssued) {
+        assert!(std::option::is_some(&certificate_issued.id), EEmptyObjectID);
         event::emit(certificate_issued);
     }
 

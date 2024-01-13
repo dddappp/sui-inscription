@@ -20,6 +20,7 @@ module sui_inscription::inscription {
     #[allow(unused_const)]
     const EDataTooLong: u64 = 102;
     const EInappropriateVersion: u64 = 103;
+    const EEmptyObjectID: u64 = 107;
 
     struct Inscription has key, store {
         id: UID,
@@ -279,6 +280,7 @@ module sui_inscription::inscription {
     }
 
     public(friend) fun emit_inscription_minted(inscription_minted: InscriptionMinted) {
+        assert!(std::option::is_some(&inscription_minted.id), EEmptyObjectID);
         event::emit(inscription_minted);
     }
 
