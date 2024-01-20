@@ -9,7 +9,7 @@ module sui_inscription::slot_put_up_candidate_logic {
     use sui::tx_context::TxContext;
 
     use sui_inscription::byte_util;
-    use sui_inscription::candidate_inscription_put_up;
+    use sui_inscription::candidate_inscription_put_up_v2;
     use sui_inscription::diff;
     use sui_inscription::id_util;
     use sui_inscription::inscription::{Self, Inscription};
@@ -33,7 +33,7 @@ module sui_inscription::slot_put_up_candidate_logic {
         clock: &Clock,
         slot: &slot::Slot,
         _ctx: &TxContext,
-    ): slot::CandidateInscriptionPutUp {
+    ): slot::CandidateInscriptionPutUpV2 {
         assert!(slot::round(slot) == inscription::round(candidate_inscription), EInvalidRound);
         assert!(slot::slot_number(slot) == inscription::slot_number(candidate_inscription), EInvalidSlotNumber);
         assert!(inscription::amount(candidate_inscription) <= MINT_AMOUNT_LIMIT, EInvalidAmount);
@@ -110,7 +110,7 @@ module sui_inscription::slot_put_up_candidate_logic {
 
         if (is_successful) {
             let candidate_inscription_id = inscription::id(candidate_inscription);
-            slot::new_candidate_inscription_put_up(
+            slot::new_candidate_inscription_put_up_v2(
                 slot,
                 candidate_inscription_id,
                 round,
@@ -124,7 +124,7 @@ module sui_inscription::slot_put_up_candidate_logic {
                 is_successful,
             )
         } else {
-            slot::new_candidate_inscription_put_up(
+            slot::new_candidate_inscription_put_up_v2(
                 slot,
                 slot::candidate_inscription_id(slot),
                 slot::round(slot),
@@ -141,36 +141,36 @@ module sui_inscription::slot_put_up_candidate_logic {
     }
 
     public(friend) fun mutate(
-        candidate_inscription_put_up: &slot::CandidateInscriptionPutUp,
+        candidate_inscription_put_up: &slot::CandidateInscriptionPutUpV2,
         slot: &mut slot::Slot,
         _ctx: &TxContext, // modify the reference to mutable if needed
     ) {
-        if (candidate_inscription_put_up::successful(candidate_inscription_put_up) == false) {
+        if (candidate_inscription_put_up_v2::successful(candidate_inscription_put_up) == false) {
             return
         };
-        let candidate_inscription_id = candidate_inscription_put_up::candidate_inscription_id(
+        let candidate_inscription_id = candidate_inscription_put_up_v2::candidate_inscription_id(
             candidate_inscription_put_up
         );
         //let slot_number = slot::slot_number(slot);
         slot::set_candidate_inscription_id(slot, candidate_inscription_id);
-        slot::set_candidate_hash(slot, candidate_inscription_put_up::candidate_hash(candidate_inscription_put_up));
+        slot::set_candidate_hash(slot, candidate_inscription_put_up_v2::candidate_hash(candidate_inscription_put_up));
         slot::set_candidate_inscriber(
             slot,
-            candidate_inscription_put_up::candidate_inscriber(candidate_inscription_put_up)
+            candidate_inscription_put_up_v2::candidate_inscriber(candidate_inscription_put_up)
         );
         slot::set_candidate_timestamp(
             slot,
-            candidate_inscription_put_up::candidate_timestamp(candidate_inscription_put_up)
+            candidate_inscription_put_up_v2::candidate_timestamp(candidate_inscription_put_up)
         );
-        slot::set_candidate_amount(slot, candidate_inscription_put_up::candidate_amount(candidate_inscription_put_up));
-        slot::set_candidate_nonce(slot, candidate_inscription_put_up::candidate_nonce(candidate_inscription_put_up));
+        slot::set_candidate_amount(slot, candidate_inscription_put_up_v2::candidate_amount(candidate_inscription_put_up));
+        slot::set_candidate_nonce(slot, candidate_inscription_put_up_v2::candidate_nonce(candidate_inscription_put_up));
         slot::set_candidate_difference(
             slot,
-            candidate_inscription_put_up::candidate_difference(candidate_inscription_put_up)
+            candidate_inscription_put_up_v2::candidate_difference(candidate_inscription_put_up)
         );
         slot::set_candidate_content(
             slot,
-            candidate_inscription_put_up::candidate_content(candidate_inscription_put_up)
+            candidate_inscription_put_up_v2::candidate_content(candidate_inscription_put_up)
         );
     }
 }

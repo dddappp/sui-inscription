@@ -41,19 +41,19 @@ module sui_inscription::slot_aggregate {
         ctx: &mut tx_context::TxContext,
     ) {
         slot::assert_schema_version(slot);
-        let candidate_inscription_put_up = slot_put_up_candidate_logic::verify(
+        let candidate_inscription_put_up_v2 = slot_put_up_candidate_logic::verify(
             candidate_inscription,
             clock,
             slot,
             ctx,
         );
         slot_put_up_candidate_logic::mutate(
-            &candidate_inscription_put_up,
+            &candidate_inscription_put_up_v2,
             slot,
             ctx,
         );
         slot::update_object_version(slot);
-        slot::emit_candidate_inscription_put_up(candidate_inscription_put_up);
+        slot::emit_candidate_inscription_put_up_v2(candidate_inscription_put_up_v2);
     }
 
     public entry fun advance(

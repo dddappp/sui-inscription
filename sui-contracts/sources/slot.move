@@ -57,6 +57,10 @@ module sui_inscription::slot {
         });
     }
 
+    public fun asssert_schema_version(slot: &Slot) {
+        assert_schema_version(slot);
+    }
+
     public fun assert_schema_version(slot: &Slot) {
         assert!(slot.schema_version == SCHEMA_VERSION, EWrongSchemaVersion);
     }
@@ -335,6 +339,100 @@ module sui_inscription::slot {
         }
     }
 
+    struct CandidateInscriptionPutUpV2 has copy, drop {
+        id: object::ID,
+        slot_number: u8,
+        version: u64,
+        candidate_inscription_id: ID,
+        round: u64,
+        candidate_hash: vector<u8>,
+        candidate_inscriber: address,
+        candidate_timestamp: u64,
+        candidate_amount: u64,
+        candidate_nonce: u128,
+        candidate_difference: u64,
+        candidate_content: String,
+        successful: bool,
+    }
+
+    public fun candidate_inscription_put_up_v2_id(candidate_inscription_put_up_v2: &CandidateInscriptionPutUpV2): object::ID {
+        candidate_inscription_put_up_v2.id
+    }
+
+    public fun candidate_inscription_put_up_v2_slot_number(candidate_inscription_put_up_v2: &CandidateInscriptionPutUpV2): u8 {
+        candidate_inscription_put_up_v2.slot_number
+    }
+
+    public fun candidate_inscription_put_up_v2_candidate_inscription_id(candidate_inscription_put_up_v2: &CandidateInscriptionPutUpV2): ID {
+        candidate_inscription_put_up_v2.candidate_inscription_id
+    }
+
+    public fun candidate_inscription_put_up_v2_round(candidate_inscription_put_up_v2: &CandidateInscriptionPutUpV2): u64 {
+        candidate_inscription_put_up_v2.round
+    }
+
+    public fun candidate_inscription_put_up_v2_candidate_hash(candidate_inscription_put_up_v2: &CandidateInscriptionPutUpV2): vector<u8> {
+        candidate_inscription_put_up_v2.candidate_hash
+    }
+
+    public fun candidate_inscription_put_up_v2_candidate_inscriber(candidate_inscription_put_up_v2: &CandidateInscriptionPutUpV2): address {
+        candidate_inscription_put_up_v2.candidate_inscriber
+    }
+
+    public fun candidate_inscription_put_up_v2_candidate_timestamp(candidate_inscription_put_up_v2: &CandidateInscriptionPutUpV2): u64 {
+        candidate_inscription_put_up_v2.candidate_timestamp
+    }
+
+    public fun candidate_inscription_put_up_v2_candidate_amount(candidate_inscription_put_up_v2: &CandidateInscriptionPutUpV2): u64 {
+        candidate_inscription_put_up_v2.candidate_amount
+    }
+
+    public fun candidate_inscription_put_up_v2_candidate_nonce(candidate_inscription_put_up_v2: &CandidateInscriptionPutUpV2): u128 {
+        candidate_inscription_put_up_v2.candidate_nonce
+    }
+
+    public fun candidate_inscription_put_up_v2_candidate_difference(candidate_inscription_put_up_v2: &CandidateInscriptionPutUpV2): u64 {
+        candidate_inscription_put_up_v2.candidate_difference
+    }
+
+    public fun candidate_inscription_put_up_v2_candidate_content(candidate_inscription_put_up_v2: &CandidateInscriptionPutUpV2): String {
+        candidate_inscription_put_up_v2.candidate_content
+    }
+
+    public fun candidate_inscription_put_up_v2_successful(candidate_inscription_put_up_v2: &CandidateInscriptionPutUpV2): bool {
+        candidate_inscription_put_up_v2.successful
+    }
+
+    public(friend) fun new_candidate_inscription_put_up_v2(
+        slot: &Slot,
+        candidate_inscription_id: ID,
+        round: u64,
+        candidate_hash: vector<u8>,
+        candidate_inscriber: address,
+        candidate_timestamp: u64,
+        candidate_amount: u64,
+        candidate_nonce: u128,
+        candidate_difference: u64,
+        candidate_content: String,
+        successful: bool,
+    ): CandidateInscriptionPutUpV2 {
+        CandidateInscriptionPutUpV2 {
+            id: id(slot),
+            slot_number: slot_number(slot),
+            version: version(slot),
+            candidate_inscription_id,
+            round,
+            candidate_hash,
+            candidate_inscriber,
+            candidate_timestamp,
+            candidate_amount,
+            candidate_nonce,
+            candidate_difference,
+            candidate_content,
+            successful,
+        }
+    }
+
     struct CandidateInscriptionPutUp has copy, drop {
         id: object::ID,
         slot_number: u8,
@@ -580,6 +678,10 @@ module sui_inscription::slot {
     public(friend) fun emit_slot_created(slot_created: SlotCreated) {
         assert!(std::option::is_some(&slot_created.id), EEmptyObjectID);
         event::emit(slot_created);
+    }
+
+    public(friend) fun emit_candidate_inscription_put_up_v2(candidate_inscription_put_up_v2: CandidateInscriptionPutUpV2) {
+        event::emit(candidate_inscription_put_up_v2);
     }
 
     public(friend) fun emit_candidate_inscription_put_up(candidate_inscription_put_up: CandidateInscriptionPutUp) {

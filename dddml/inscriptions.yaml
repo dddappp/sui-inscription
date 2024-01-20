@@ -147,7 +147,7 @@ aggregates:
       #  #type: CertificateType
     methods:
       Issue:
-        isInternal: true
+        #isInternal: true
         event:
           name: CertificateIssued
           #isObjectShared: true
@@ -255,7 +255,7 @@ aggregates:
             referenceType: Clock
             isIgnoredInEvent: true
         event:
-          name: CandidateInscriptionPutUp
+          name: CandidateInscriptionPutUpV2
           properties:
             Round:
               type: u64
@@ -296,6 +296,33 @@ aggregates:
           properties:
             Round:
               type: u64
+
+    eventObjects:
+      CandidateInscriptionPutUp:
+        properties:
+          Round:
+            type: u64
+          CandidateInscriptionId:
+            type: ID
+          CandidateHash:
+            type: vector<u8>
+          CandidateInscriber:
+            type: address
+          CandidateTimestamp:
+            type: u64
+          CandidateAmount:
+            type: u64
+          CandidateNonce:
+            type: u128
+          CandidateDifference:
+            type: u64
+          CandidateContent:
+            type: String
+            length: 1000
+          #Successful:
+          #  type: bool
+
+
 
 configuration:
   sequenceNumber: 1000
