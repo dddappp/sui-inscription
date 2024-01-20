@@ -446,7 +446,6 @@ module sui_inscription::slot {
         candidate_nonce: u128,
         candidate_difference: u64,
         candidate_content: String,
-        successful: bool,
     }
 
     public fun candidate_inscription_put_up_id(candidate_inscription_put_up: &CandidateInscriptionPutUp): object::ID {
@@ -493,10 +492,6 @@ module sui_inscription::slot {
         candidate_inscription_put_up.candidate_content
     }
 
-    public fun candidate_inscription_put_up_successful(candidate_inscription_put_up: &CandidateInscriptionPutUp): bool {
-        candidate_inscription_put_up.successful
-    }
-
     public(friend) fun new_candidate_inscription_put_up(
         slot: &Slot,
         candidate_inscription_id: ID,
@@ -508,7 +503,6 @@ module sui_inscription::slot {
         candidate_nonce: u128,
         candidate_difference: u64,
         candidate_content: String,
-        successful: bool,
     ): CandidateInscriptionPutUp {
         CandidateInscriptionPutUp {
             id: id(slot),
@@ -523,7 +517,6 @@ module sui_inscription::slot {
             candidate_nonce,
             candidate_difference,
             candidate_content,
-            successful,
         }
     }
 

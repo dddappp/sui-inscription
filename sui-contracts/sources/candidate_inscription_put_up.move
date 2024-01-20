@@ -53,8 +53,4 @@ module sui_inscription::candidate_inscription_put_up {
         slot::candidate_inscription_put_up_candidate_content(candidate_inscription_put_up)
     }
 
-    public fun successful(candidate_inscription_put_up: &CandidateInscriptionPutUp): bool {
-        slot::candidate_inscription_put_up_successful(candidate_inscription_put_up)
-    }
-
 }
