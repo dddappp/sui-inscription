@@ -57,6 +57,7 @@ module sui_inscription::slot {
         });
     }
 
+    /// There is a typo in the fun name. But it is kept for compatibility.
     public fun asssert_schema_version(slot: &Slot) {
         assert_schema_version(slot);
     }
@@ -433,6 +434,7 @@ module sui_inscription::slot {
         }
     }
 
+    /// It is no longer used. But keep it for compatibility.
     struct CandidateInscriptionPutUp has copy, drop {
         id: object::ID,
         slot_number: u8,

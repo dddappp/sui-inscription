@@ -300,10 +300,10 @@ aggregates:
     eventObjects:
       CandidateInscriptionPutUp:
         properties:
-          Round:
-            type: u64
           CandidateInscriptionId:
             type: ID
+          Round:
+            type: u64
           CandidateHash:
             type: vector<u8>
           CandidateInscriber:

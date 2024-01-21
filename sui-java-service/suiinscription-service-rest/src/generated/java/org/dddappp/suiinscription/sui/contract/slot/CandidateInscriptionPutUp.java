@@ -15,14 +15,13 @@ import java.util.*;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class CandidateInscriptionPutUp {
+    private String id;
 
     private Integer slotNumber;
 
-    private BigInteger version;
+    private String candidateInscriptionId;
 
     private BigInteger round;
-
-    private String candidateInscriptionId;
 
     private int[] candidateHash;
 
@@ -38,7 +37,13 @@ public class CandidateInscriptionPutUp {
 
     private String candidateContent;
 
-    private String id;
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public Integer getSlotNumber() {
         return slotNumber;
@@ -48,12 +53,12 @@ public class CandidateInscriptionPutUp {
         this.slotNumber = slotNumber;
     }
 
-    public BigInteger getVersion() {
-        return version;
+    public String getCandidateInscriptionId() {
+        return candidateInscriptionId;
     }
 
-    public void setVersion(BigInteger version) {
-        this.version = version;
+    public void setCandidateInscriptionId(String candidateInscriptionId) {
+        this.candidateInscriptionId = candidateInscriptionId;
     }
 
     public BigInteger getRound() {
@@ -62,14 +67,6 @@ public class CandidateInscriptionPutUp {
 
     public void setRound(BigInteger round) {
         this.round = round;
-    }
-
-    public String getCandidateInscriptionId() {
-        return candidateInscriptionId;
-    }
-
-    public void setCandidateInscriptionId(String candidateInscriptionId) {
-        this.candidateInscriptionId = candidateInscriptionId;
     }
 
     public int[] getCandidateHash() {
@@ -128,19 +125,13 @@ public class CandidateInscriptionPutUp {
         this.candidateContent = candidateContent;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     @Override
     public String toString() {
         return "CandidateInscriptionPutUp{" +
-                "round=" + round +
+                "id=" + '\'' + id + '\'' +
+                ", slotNumber=" + slotNumber +
                 ", candidateInscriptionId=" + '\'' + candidateInscriptionId + '\'' +
+                ", round=" + round +
                 ", candidateHash=" + Arrays.toString(candidateHash) +
                 ", candidateInscriber=" + '\'' + candidateInscriber + '\'' +
                 ", candidateTimestamp=" + candidateTimestamp +
@@ -148,7 +139,6 @@ public class CandidateInscriptionPutUp {
                 ", candidateNonce=" + candidateNonce +
                 ", candidateDifference=" + candidateDifference +
                 ", candidateContent=" + '\'' + candidateContent + '\'' +
-                ", id=" + '\'' + id + '\'' +
                 '}';
     }
 

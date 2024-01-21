@@ -83,13 +83,13 @@ public interface SlotEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasSta
     }
 
     interface CandidateInscriptionPutUp extends SlotEvent {
-        BigInteger getRound();
-
-        void setRound(BigInteger value);
-
         String getCandidateInscriptionId();
 
         void setCandidateInscriptionId(String value);
+
+        BigInteger getRound();
+
+        void setRound(BigInteger value);
 
         int[] getCandidateHash();
 

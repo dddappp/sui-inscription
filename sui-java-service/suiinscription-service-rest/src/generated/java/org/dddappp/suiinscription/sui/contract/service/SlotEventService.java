@@ -162,46 +162,6 @@ public class SlotEventService {
         slotEventRepository.save(slotAdvanced);
     }
 
-    @Transactional
-    public void pullCandidateInscriptionPutUpEvents() {
-        String packageId = getDefaultSuiPackageId();
-        if (packageId == null) {
-            return;
-        }
-        int limit = 1;
-        EventId cursor = getCandidateInscriptionPutUpEventNextCursor();
-        while (true) {
-            PaginatedMoveEvents<CandidateInscriptionPutUp> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.SLOT_MODULE_CANDIDATE_INSCRIPTION_PUT_UP,
-                    cursor, limit, false, CandidateInscriptionPutUp.class);
-
-            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
-                cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<CandidateInscriptionPutUp> eventEnvelope : eventPage.getData()) {
-                    saveCandidateInscriptionPutUp(eventEnvelope);
-                }
-            } else {
-                break;
-            }
-            if (!Page.hasNextPage(eventPage)) {
-                break;
-            }
-        }
-    }
-
-    private EventId getCandidateInscriptionPutUpEventNextCursor() {
-        AbstractSlotEvent lastEvent = slotEventRepository.findFirstCandidateInscriptionPutUpByOrderBySuiTimestampDesc();
-        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
-    }
-
-    private void saveCandidateInscriptionPutUp(SuiMoveEventEnvelope<CandidateInscriptionPutUp> eventEnvelope) {
-        AbstractSlotEvent.CandidateInscriptionPutUp candidateInscriptionPutUp = DomainBeanUtils.toCandidateInscriptionPutUp(eventEnvelope);
-        if (slotEventRepository.findById(candidateInscriptionPutUp.getSlotEventId()).isPresent()) {
-            return;
-        }
-        slotEventRepository.save(candidateInscriptionPutUp);
-    }
-
 
     private String getDefaultSuiPackageId() {
         return suiPackageRepository.findById(ContractConstants.DEFAULT_SUI_PACKAGE_NAME)

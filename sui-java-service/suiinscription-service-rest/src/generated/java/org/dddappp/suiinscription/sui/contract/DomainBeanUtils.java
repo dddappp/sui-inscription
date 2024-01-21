@@ -18,7 +18,6 @@ import org.dddappp.suiinscription.sui.contract.certificate.CertificateIssued;
 import org.dddappp.suiinscription.domain.slot.AbstractSlotEvent;
 import org.dddappp.suiinscription.sui.contract.slot.SlotCreated;
 import org.dddappp.suiinscription.sui.contract.slot.CandidateInscriptionPutUpV2;
-import org.dddappp.suiinscription.sui.contract.slot.CandidateInscriptionPutUp;
 import org.dddappp.suiinscription.sui.contract.slot.SlotAdvanced;
 
 /**
@@ -148,34 +147,6 @@ public class DomainBeanUtils {
         candidateInscriptionPutUpV2.setSuiSender(eventEnvelope.getSender());
 
         return candidateInscriptionPutUpV2;
-    }
-
-    public static AbstractSlotEvent.CandidateInscriptionPutUp toCandidateInscriptionPutUp(SuiMoveEventEnvelope<CandidateInscriptionPutUp> eventEnvelope) {
-        CandidateInscriptionPutUp contractEvent = eventEnvelope.getParsedJson();
-
-        AbstractSlotEvent.CandidateInscriptionPutUp candidateInscriptionPutUp = new AbstractSlotEvent.CandidateInscriptionPutUp();
-        candidateInscriptionPutUp.setId_(contractEvent.getId());
-        candidateInscriptionPutUp.setSlotNumber(contractEvent.getSlotNumber());
-        candidateInscriptionPutUp.setCandidateInscriptionId(contractEvent.getCandidateInscriptionId());
-        candidateInscriptionPutUp.setRound(contractEvent.getRound());
-        candidateInscriptionPutUp.setCandidateHash(contractEvent.getCandidateHash());
-        candidateInscriptionPutUp.setCandidateInscriber(contractEvent.getCandidateInscriber());
-        candidateInscriptionPutUp.setCandidateTimestamp(contractEvent.getCandidateTimestamp());
-        candidateInscriptionPutUp.setCandidateAmount(contractEvent.getCandidateAmount());
-        candidateInscriptionPutUp.setCandidateNonce(contractEvent.getCandidateNonce());
-        candidateInscriptionPutUp.setCandidateDifference(contractEvent.getCandidateDifference());
-        candidateInscriptionPutUp.setCandidateContent(contractEvent.getCandidateContent());
-        candidateInscriptionPutUp.setVersion(contractEvent.getVersion());
-
-        candidateInscriptionPutUp.setSuiTimestamp(eventEnvelope.getTimestampMs());
-        candidateInscriptionPutUp.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
-        candidateInscriptionPutUp.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
-
-        candidateInscriptionPutUp.setSuiPackageId(eventEnvelope.getPackageId());
-        candidateInscriptionPutUp.setSuiTransactionModule(eventEnvelope.getTransactionModule());
-        candidateInscriptionPutUp.setSuiSender(eventEnvelope.getSender());
-
-        return candidateInscriptionPutUp;
     }
 
     public static AbstractSlotEvent.SlotAdvanced toSlotAdvanced(SuiMoveEventEnvelope<SlotAdvanced> eventEnvelope) {

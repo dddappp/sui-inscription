@@ -412,18 +412,6 @@ public abstract class AbstractSlotEvent extends AbstractEvent implements SlotEve
             return "CandidateInscriptionPutUp";
         }
 
-        public BigInteger getRound() {
-            Object val = getDynamicProperties().get("round");
-            if (val instanceof BigInteger) {
-                return (BigInteger) val;
-            }
-            return ApplicationContext.current.getTypeConverter().convertValue(val, BigInteger.class);
-        }
-
-        public void setRound(BigInteger value) {
-            getDynamicProperties().put("round", value);
-        }
-
         public String getCandidateInscriptionId() {
             Object val = getDynamicProperties().get("candidateInscriptionId");
             if (val instanceof String) {
@@ -434,6 +422,18 @@ public abstract class AbstractSlotEvent extends AbstractEvent implements SlotEve
 
         public void setCandidateInscriptionId(String value) {
             getDynamicProperties().put("candidateInscriptionId", value);
+        }
+
+        public BigInteger getRound() {
+            Object val = getDynamicProperties().get("round");
+            if (val instanceof BigInteger) {
+                return (BigInteger) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, BigInteger.class);
+        }
+
+        public void setRound(BigInteger value) {
+            getDynamicProperties().put("round", value);
         }
 
         public int[] getCandidateHash() {
