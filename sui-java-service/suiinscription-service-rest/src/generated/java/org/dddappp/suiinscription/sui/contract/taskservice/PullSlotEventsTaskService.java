@@ -21,9 +21,9 @@ public class PullSlotEventsTaskService {
         slotEventService.pullSlotCreatedEvents();
     }
 
-    @Scheduled(fixedDelayString = "${sui.contract.pull-slot-events.candidate-inscription-put-up.fixed-delay:5000}")
-    public void pullCandidateInscriptionPutUpEvents() {
-        slotEventService.pullCandidateInscriptionPutUpEvents();
+    @Scheduled(fixedDelayString = "${sui.contract.pull-slot-events.candidate-inscription-put-up-v2.fixed-delay:5000}")
+    public void pullCandidateInscriptionPutUpV2Events() {
+        slotEventService.pullCandidateInscriptionPutUpV2Events();
     }
 
     @Scheduled(fixedDelayString = "${sui.contract.pull-slot-events.slot-advanced.fixed-delay:5000}")

@@ -14,15 +14,16 @@ import java.math.*;
 import java.util.*;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class CandidateInscriptionPutUp {
+public class CandidateInscriptionPutUpV2 {
+    private String id;
 
     private Integer slotNumber;
 
     private BigInteger version;
 
-    private BigInteger round;
-
     private String candidateInscriptionId;
+
+    private BigInteger round;
 
     private int[] candidateHash;
 
@@ -38,7 +39,15 @@ public class CandidateInscriptionPutUp {
 
     private String candidateContent;
 
-    private String id;
+    private Boolean successful;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public Integer getSlotNumber() {
         return slotNumber;
@@ -56,20 +65,20 @@ public class CandidateInscriptionPutUp {
         this.version = version;
     }
 
-    public BigInteger getRound() {
-        return round;
-    }
-
-    public void setRound(BigInteger round) {
-        this.round = round;
-    }
-
     public String getCandidateInscriptionId() {
         return candidateInscriptionId;
     }
 
     public void setCandidateInscriptionId(String candidateInscriptionId) {
         this.candidateInscriptionId = candidateInscriptionId;
+    }
+
+    public BigInteger getRound() {
+        return round;
+    }
+
+    public void setRound(BigInteger round) {
+        this.round = round;
     }
 
     public int[] getCandidateHash() {
@@ -128,19 +137,22 @@ public class CandidateInscriptionPutUp {
         this.candidateContent = candidateContent;
     }
 
-    public String getId() {
-        return id;
+    public Boolean getSuccessful() {
+        return successful;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setSuccessful(Boolean successful) {
+        this.successful = successful;
     }
 
     @Override
     public String toString() {
-        return "CandidateInscriptionPutUp{" +
-                "round=" + round +
+        return "CandidateInscriptionPutUpV2{" +
+                "id=" + '\'' + id + '\'' +
+                ", slotNumber=" + slotNumber +
+                ", version=" + version +
                 ", candidateInscriptionId=" + '\'' + candidateInscriptionId + '\'' +
+                ", round=" + round +
                 ", candidateHash=" + Arrays.toString(candidateHash) +
                 ", candidateInscriber=" + '\'' + candidateInscriber + '\'' +
                 ", candidateTimestamp=" + candidateTimestamp +
@@ -148,7 +160,7 @@ public class CandidateInscriptionPutUp {
                 ", candidateNonce=" + candidateNonce +
                 ", candidateDifference=" + candidateDifference +
                 ", candidateContent=" + '\'' + candidateContent + '\'' +
-                ", id=" + '\'' + id + '\'' +
+                ", successful=" + successful +
                 '}';
     }
 

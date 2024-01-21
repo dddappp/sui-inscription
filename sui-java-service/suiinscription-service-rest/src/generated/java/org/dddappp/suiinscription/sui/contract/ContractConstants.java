@@ -10,17 +10,19 @@ public class ContractConstants {
 
     public static final String SLOT_MODULE_SLOT_NUMBER_TABLE = "slot::SlotNumberTable";
 
-    public static final String INSCRIPTION_MODULE_INSCRIPTION_MINTED = "inscription::InscriptionMinted";
-
     public static final String INSCRIPTION_MODULE_INSCRIPTION_DELETED = "inscription::InscriptionDeleted";
+
+    public static final String INSCRIPTION_MODULE_INSCRIPTION_MINTED = "inscription::InscriptionMinted";
 
     public static final String CERTIFICATE_MODULE_CERTIFICATE_ISSUED = "certificate::CertificateIssued";
 
     public static final String SLOT_MODULE_SLOT_CREATED = "slot::SlotCreated";
 
-    public static final String SLOT_MODULE_CANDIDATE_INSCRIPTION_PUT_UP = "slot::CandidateInscriptionPutUp";
+    public static final String SLOT_MODULE_CANDIDATE_INSCRIPTION_PUT_UP_V2 = "slot::CandidateInscriptionPutUpV2";
 
     public static final String SLOT_MODULE_SLOT_ADVANCED = "slot::SlotAdvanced";
+
+    public static final String SLOT_MODULE_CANDIDATE_INSCRIPTION_PUT_UP = "slot::CandidateInscriptionPutUp";
 
 
     public static String[] getMoveObjectIdGeneratorObjectTypes(String packageId) {

@@ -79,7 +79,7 @@ public class HibernateSlotStateRepository implements SlotStateRepository {
         SlotState persistent = getCurrentSession().get(AbstractSlotState.SimpleSlotState.class, detached.getSlotNumber());
         if (persistent != null) {
             merge(persistent, detached);
-            getCurrentSession().merge(detached);
+            getCurrentSession().save(persistent);
         } else {
             getCurrentSession().save(detached);
         }
@@ -87,7 +87,7 @@ public class HibernateSlotStateRepository implements SlotStateRepository {
     }
 
     private void merge(SlotState persistent, SlotState detached) {
-        ((SlotState.MutableSlotState) detached).setOffChainVersion(persistent.getOffChainVersion());
+        ((AbstractSlotState) persistent).merge(detached);
     }
 
 }

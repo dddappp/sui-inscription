@@ -79,7 +79,7 @@ public class HibernateInscriptionStateRepository implements InscriptionStateRepo
         InscriptionState persistent = getCurrentSession().get(AbstractInscriptionState.SimpleInscriptionState.class, detached.getId());
         if (persistent != null) {
             merge(persistent, detached);
-            getCurrentSession().merge(detached);
+            getCurrentSession().save(persistent);
         } else {
             getCurrentSession().save(detached);
         }
@@ -87,7 +87,7 @@ public class HibernateInscriptionStateRepository implements InscriptionStateRepo
     }
 
     private void merge(InscriptionState persistent, InscriptionState detached) {
-        ((InscriptionState.MutableInscriptionState) detached).setOffChainVersion(persistent.getOffChainVersion());
+        ((AbstractInscriptionState) persistent).merge(detached);
     }
 
 }

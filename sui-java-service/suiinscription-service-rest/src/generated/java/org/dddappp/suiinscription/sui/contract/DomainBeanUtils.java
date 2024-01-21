@@ -17,6 +17,7 @@ import org.dddappp.suiinscription.domain.certificate.AbstractCertificateEvent;
 import org.dddappp.suiinscription.sui.contract.certificate.CertificateIssued;
 import org.dddappp.suiinscription.domain.slot.AbstractSlotEvent;
 import org.dddappp.suiinscription.sui.contract.slot.SlotCreated;
+import org.dddappp.suiinscription.sui.contract.slot.CandidateInscriptionPutUpV2;
 import org.dddappp.suiinscription.sui.contract.slot.CandidateInscriptionPutUp;
 import org.dddappp.suiinscription.sui.contract.slot.SlotAdvanced;
 
@@ -120,6 +121,35 @@ public class DomainBeanUtils {
         return slotCreated;
     }
 
+    public static AbstractSlotEvent.CandidateInscriptionPutUpV2 toCandidateInscriptionPutUpV2(SuiMoveEventEnvelope<CandidateInscriptionPutUpV2> eventEnvelope) {
+        CandidateInscriptionPutUpV2 contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractSlotEvent.CandidateInscriptionPutUpV2 candidateInscriptionPutUpV2 = new AbstractSlotEvent.CandidateInscriptionPutUpV2();
+        candidateInscriptionPutUpV2.setId_(contractEvent.getId());
+        candidateInscriptionPutUpV2.setSlotNumber(contractEvent.getSlotNumber());
+        candidateInscriptionPutUpV2.setCandidateInscriptionId(contractEvent.getCandidateInscriptionId());
+        candidateInscriptionPutUpV2.setRound(contractEvent.getRound());
+        candidateInscriptionPutUpV2.setCandidateHash(contractEvent.getCandidateHash());
+        candidateInscriptionPutUpV2.setCandidateInscriber(contractEvent.getCandidateInscriber());
+        candidateInscriptionPutUpV2.setCandidateTimestamp(contractEvent.getCandidateTimestamp());
+        candidateInscriptionPutUpV2.setCandidateAmount(contractEvent.getCandidateAmount());
+        candidateInscriptionPutUpV2.setCandidateNonce(contractEvent.getCandidateNonce());
+        candidateInscriptionPutUpV2.setCandidateDifference(contractEvent.getCandidateDifference());
+        candidateInscriptionPutUpV2.setCandidateContent(contractEvent.getCandidateContent());
+        candidateInscriptionPutUpV2.setSuccessful(contractEvent.getSuccessful());
+        candidateInscriptionPutUpV2.setVersion(contractEvent.getVersion());
+
+        candidateInscriptionPutUpV2.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        candidateInscriptionPutUpV2.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        candidateInscriptionPutUpV2.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        candidateInscriptionPutUpV2.setSuiPackageId(eventEnvelope.getPackageId());
+        candidateInscriptionPutUpV2.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        candidateInscriptionPutUpV2.setSuiSender(eventEnvelope.getSender());
+
+        return candidateInscriptionPutUpV2;
+    }
+
     public static AbstractSlotEvent.CandidateInscriptionPutUp toCandidateInscriptionPutUp(SuiMoveEventEnvelope<CandidateInscriptionPutUp> eventEnvelope) {
         CandidateInscriptionPutUp contractEvent = eventEnvelope.getParsedJson();
 
@@ -135,7 +165,6 @@ public class DomainBeanUtils {
         candidateInscriptionPutUp.setCandidateNonce(contractEvent.getCandidateNonce());
         candidateInscriptionPutUp.setCandidateDifference(contractEvent.getCandidateDifference());
         candidateInscriptionPutUp.setCandidateContent(contractEvent.getCandidateContent());
-        candidateInscriptionPutUp.setSuccessful(contractEvent.getSuccessful());
         candidateInscriptionPutUp.setVersion(contractEvent.getVersion());
 
         candidateInscriptionPutUp.setSuiTimestamp(eventEnvelope.getTimestampMs());

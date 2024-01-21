@@ -79,7 +79,7 @@ public class HibernateCertificateStateRepository implements CertificateStateRepo
         CertificateState persistent = getCurrentSession().get(AbstractCertificateState.SimpleCertificateState.class, detached.getId());
         if (persistent != null) {
             merge(persistent, detached);
-            getCurrentSession().merge(detached);
+            getCurrentSession().save(persistent);
         } else {
             getCurrentSession().save(detached);
         }
@@ -87,7 +87,7 @@ public class HibernateCertificateStateRepository implements CertificateStateRepo
     }
 
     private void merge(CertificateState persistent, CertificateState detached) {
-        ((CertificateState.MutableCertificateState) detached).setOffChainVersion(persistent.getOffChainVersion());
+        ((AbstractCertificateState) persistent).merge(detached);
     }
 
 }

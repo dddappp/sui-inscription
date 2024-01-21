@@ -61,8 +61,8 @@ public abstract class AbstractSlotAggregate extends AbstractAggregate implements
 
         @Override
         public void putUpCandidate(String candidateInscription, String clock, Long offChainVersion, String commandId, String requesterId, SlotCommands.PutUpCandidate c) {
-            java.util.function.Supplier<SlotEvent.CandidateInscriptionPutUp> eventFactory = () -> newCandidateInscriptionPutUp(candidateInscription, clock, offChainVersion, commandId, requesterId);
-            SlotEvent.CandidateInscriptionPutUp e;
+            java.util.function.Supplier<SlotEvent.CandidateInscriptionPutUpV2> eventFactory = () -> newCandidateInscriptionPutUpV2(candidateInscription, clock, offChainVersion, commandId, requesterId);
+            SlotEvent.CandidateInscriptionPutUpV2 e;
             try {
                 e = verifyPutUpCandidate(eventFactory, candidateInscription, c);
             } catch (Exception ex) {
@@ -105,10 +105,10 @@ public abstract class AbstractSlotAggregate extends AbstractAggregate implements
         }
            
 
-        protected SlotEvent.CandidateInscriptionPutUp verifyPutUpCandidate(java.util.function.Supplier<SlotEvent.CandidateInscriptionPutUp> eventFactory, String candidateInscription, SlotCommands.PutUpCandidate c) {
+        protected SlotEvent.CandidateInscriptionPutUpV2 verifyPutUpCandidate(java.util.function.Supplier<SlotEvent.CandidateInscriptionPutUpV2> eventFactory, String candidateInscription, SlotCommands.PutUpCandidate c) {
             String CandidateInscription = candidateInscription;
 
-            SlotEvent.CandidateInscriptionPutUp e = (SlotEvent.CandidateInscriptionPutUp) ReflectUtils.invokeStaticMethod(
+            SlotEvent.CandidateInscriptionPutUpV2 e = (SlotEvent.CandidateInscriptionPutUpV2) ReflectUtils.invokeStaticMethod(
                     "org.dddappp.suiinscription.domain.slot.PutUpCandidateLogic",
                     "verify",
                     new Class[]{java.util.function.Supplier.class, SlotState.class, String.class, VerificationContext.class},
@@ -118,7 +118,7 @@ public abstract class AbstractSlotAggregate extends AbstractAggregate implements
 //package org.dddappp.suiinscription.domain.slot;
 //
 //public class PutUpCandidateLogic {
-//    public static SlotEvent.CandidateInscriptionPutUp verify(java.util.function.Supplier<SlotEvent.CandidateInscriptionPutUp> eventFactory, SlotState slotState, String candidateInscription, VerificationContext verificationContext) {
+//    public static SlotEvent.CandidateInscriptionPutUpV2 verify(java.util.function.Supplier<SlotEvent.CandidateInscriptionPutUpV2> eventFactory, SlotState slotState, String candidateInscription, VerificationContext verificationContext) {
 //    }
 //}
 
@@ -169,9 +169,9 @@ public abstract class AbstractSlotAggregate extends AbstractAggregate implements
             return e;
         }
 
-        protected AbstractSlotEvent.CandidateInscriptionPutUp newCandidateInscriptionPutUp(String candidateInscription, String clock, Long offChainVersion, String commandId, String requesterId) {
+        protected AbstractSlotEvent.CandidateInscriptionPutUpV2 newCandidateInscriptionPutUpV2(String candidateInscription, String clock, Long offChainVersion, String commandId, String requesterId) {
             SlotEventId eventId = new SlotEventId(getState().getSlotNumber(), null);
-            AbstractSlotEvent.CandidateInscriptionPutUp e = new AbstractSlotEvent.CandidateInscriptionPutUp();
+            AbstractSlotEvent.CandidateInscriptionPutUpV2 e = new AbstractSlotEvent.CandidateInscriptionPutUpV2();
 
             e.setCandidateInscriptionId(null);
             e.setRound(null);

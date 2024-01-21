@@ -47,7 +47,7 @@
         <column name="dynamic_properties_lob" sql-type="VARCHAR(2000)" />
       </property>
       <subclass name="AbstractSlotEvent$SlotCreated" discriminator-value="SlotCreated" />
-      <subclass name="AbstractSlotEvent$CandidateInscriptionPutUp" discriminator-value="CandidateInscriptionPutUp" />
+      <subclass name="AbstractSlotEvent$CandidateInscriptionPutUpV2" discriminator-value="CandidateInscriptionPutUpV2" />
       <subclass name="AbstractSlotEvent$SlotAdvanced" discriminator-value="SlotAdvanced" />
     </subclass>
   </class>

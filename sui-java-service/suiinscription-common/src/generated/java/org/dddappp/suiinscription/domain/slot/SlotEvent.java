@@ -32,7 +32,7 @@ public interface SlotEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasSta
 
     }
 
-    interface CandidateInscriptionPutUp extends SlotEvent {
+    interface CandidateInscriptionPutUpV2 extends SlotEvent {
         String getCandidateInscriptionId();
 
         void setCandidateInscriptionId(String value);
@@ -79,6 +79,45 @@ public interface SlotEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasSta
         BigInteger getRound();
 
         void setRound(BigInteger value);
+
+    }
+
+    interface CandidateInscriptionPutUp extends SlotEvent {
+        BigInteger getRound();
+
+        void setRound(BigInteger value);
+
+        String getCandidateInscriptionId();
+
+        void setCandidateInscriptionId(String value);
+
+        int[] getCandidateHash();
+
+        void setCandidateHash(int[] value);
+
+        String getCandidateInscriber();
+
+        void setCandidateInscriber(String value);
+
+        BigInteger getCandidateTimestamp();
+
+        void setCandidateTimestamp(BigInteger value);
+
+        BigInteger getCandidateAmount();
+
+        void setCandidateAmount(BigInteger value);
+
+        BigInteger getCandidateNonce();
+
+        void setCandidateNonce(BigInteger value);
+
+        BigInteger getCandidateDifference();
+
+        void setCandidateDifference(BigInteger value);
+
+        String getCandidateContent();
+
+        void setCandidateContent(String value);
 
     }
 

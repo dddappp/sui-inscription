@@ -15,8 +15,9 @@ import org.dddappp.suiinscription.sui.contract.ContractConstants;
 import org.dddappp.suiinscription.sui.contract.DomainBeanUtils;
 import org.dddappp.suiinscription.sui.contract.SuiPackage;
 import org.dddappp.suiinscription.sui.contract.slot.SlotCreated;
-import org.dddappp.suiinscription.sui.contract.slot.CandidateInscriptionPutUp;
+import org.dddappp.suiinscription.sui.contract.slot.CandidateInscriptionPutUpV2;
 import org.dddappp.suiinscription.sui.contract.slot.SlotAdvanced;
+import org.dddappp.suiinscription.sui.contract.slot.CandidateInscriptionPutUp;
 import org.dddappp.suiinscription.sui.contract.repository.SlotEventRepository;
 import org.dddappp.suiinscription.sui.contract.repository.SuiPackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,22 +83,22 @@ public class SlotEventService {
     }
 
     @Transactional
-    public void pullCandidateInscriptionPutUpEvents() {
+    public void pullCandidateInscriptionPutUpV2Events() {
         String packageId = getDefaultSuiPackageId();
         if (packageId == null) {
             return;
         }
         int limit = 1;
-        EventId cursor = getCandidateInscriptionPutUpEventNextCursor();
+        EventId cursor = getCandidateInscriptionPutUpV2EventNextCursor();
         while (true) {
-            PaginatedMoveEvents<CandidateInscriptionPutUp> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.SLOT_MODULE_CANDIDATE_INSCRIPTION_PUT_UP,
-                    cursor, limit, false, CandidateInscriptionPutUp.class);
+            PaginatedMoveEvents<CandidateInscriptionPutUpV2> eventPage = suiJsonRpcClient.queryMoveEvents(
+                    packageId + "::" + ContractConstants.SLOT_MODULE_CANDIDATE_INSCRIPTION_PUT_UP_V2,
+                    cursor, limit, false, CandidateInscriptionPutUpV2.class);
 
             if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
                 cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<CandidateInscriptionPutUp> eventEnvelope : eventPage.getData()) {
-                    saveCandidateInscriptionPutUp(eventEnvelope);
+                for (SuiMoveEventEnvelope<CandidateInscriptionPutUpV2> eventEnvelope : eventPage.getData()) {
+                    saveCandidateInscriptionPutUpV2(eventEnvelope);
                 }
             } else {
                 break;
@@ -108,17 +109,17 @@ public class SlotEventService {
         }
     }
 
-    private EventId getCandidateInscriptionPutUpEventNextCursor() {
-        AbstractSlotEvent lastEvent = slotEventRepository.findFirstCandidateInscriptionPutUpByOrderBySuiTimestampDesc();
+    private EventId getCandidateInscriptionPutUpV2EventNextCursor() {
+        AbstractSlotEvent lastEvent = slotEventRepository.findFirstCandidateInscriptionPutUpV2ByOrderBySuiTimestampDesc();
         return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
     }
 
-    private void saveCandidateInscriptionPutUp(SuiMoveEventEnvelope<CandidateInscriptionPutUp> eventEnvelope) {
-        AbstractSlotEvent.CandidateInscriptionPutUp candidateInscriptionPutUp = DomainBeanUtils.toCandidateInscriptionPutUp(eventEnvelope);
-        if (slotEventRepository.findById(candidateInscriptionPutUp.getSlotEventId()).isPresent()) {
+    private void saveCandidateInscriptionPutUpV2(SuiMoveEventEnvelope<CandidateInscriptionPutUpV2> eventEnvelope) {
+        AbstractSlotEvent.CandidateInscriptionPutUpV2 candidateInscriptionPutUpV2 = DomainBeanUtils.toCandidateInscriptionPutUpV2(eventEnvelope);
+        if (slotEventRepository.findById(candidateInscriptionPutUpV2.getSlotEventId()).isPresent()) {
             return;
         }
-        slotEventRepository.save(candidateInscriptionPutUp);
+        slotEventRepository.save(candidateInscriptionPutUpV2);
     }
 
     @Transactional
@@ -159,6 +160,46 @@ public class SlotEventService {
             return;
         }
         slotEventRepository.save(slotAdvanced);
+    }
+
+    @Transactional
+    public void pullCandidateInscriptionPutUpEvents() {
+        String packageId = getDefaultSuiPackageId();
+        if (packageId == null) {
+            return;
+        }
+        int limit = 1;
+        EventId cursor = getCandidateInscriptionPutUpEventNextCursor();
+        while (true) {
+            PaginatedMoveEvents<CandidateInscriptionPutUp> eventPage = suiJsonRpcClient.queryMoveEvents(
+                    packageId + "::" + ContractConstants.SLOT_MODULE_CANDIDATE_INSCRIPTION_PUT_UP,
+                    cursor, limit, false, CandidateInscriptionPutUp.class);
+
+            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
+                cursor = eventPage.getNextCursor();
+                for (SuiMoveEventEnvelope<CandidateInscriptionPutUp> eventEnvelope : eventPage.getData()) {
+                    saveCandidateInscriptionPutUp(eventEnvelope);
+                }
+            } else {
+                break;
+            }
+            if (!Page.hasNextPage(eventPage)) {
+                break;
+            }
+        }
+    }
+
+    private EventId getCandidateInscriptionPutUpEventNextCursor() {
+        AbstractSlotEvent lastEvent = slotEventRepository.findFirstCandidateInscriptionPutUpByOrderBySuiTimestampDesc();
+        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
+    }
+
+    private void saveCandidateInscriptionPutUp(SuiMoveEventEnvelope<CandidateInscriptionPutUp> eventEnvelope) {
+        AbstractSlotEvent.CandidateInscriptionPutUp candidateInscriptionPutUp = DomainBeanUtils.toCandidateInscriptionPutUp(eventEnvelope);
+        if (slotEventRepository.findById(candidateInscriptionPutUp.getSlotEventId()).isPresent()) {
+            return;
+        }
+        slotEventRepository.save(candidateInscriptionPutUp);
     }
 
 

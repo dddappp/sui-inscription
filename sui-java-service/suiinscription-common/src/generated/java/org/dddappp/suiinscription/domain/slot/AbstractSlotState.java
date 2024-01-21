@@ -351,8 +351,8 @@ public abstract class AbstractSlotState implements SlotState.SqlSlotState {
             ;
         } else if (e instanceof AbstractSlotEvent.SlotCreated) {
             when((AbstractSlotEvent.SlotCreated)e);
-        } else if (e instanceof AbstractSlotEvent.CandidateInscriptionPutUp) {
-            when((AbstractSlotEvent.CandidateInscriptionPutUp)e);
+        } else if (e instanceof AbstractSlotEvent.CandidateInscriptionPutUpV2) {
+            when((AbstractSlotEvent.CandidateInscriptionPutUpV2)e);
         } else if (e instanceof AbstractSlotEvent.SlotAdvanced) {
             when((AbstractSlotEvent.SlotAdvanced)e);
         } else {
@@ -436,7 +436,7 @@ public abstract class AbstractSlotState implements SlotState.SqlSlotState {
 
     }
 
-    public void when(AbstractSlotEvent.CandidateInscriptionPutUp e) {
+    public void when(AbstractSlotEvent.CandidateInscriptionPutUpV2 e) {
         throwOnWrongEvent(e);
 
         String candidateInscriptionId = e.getCandidateInscriptionId();

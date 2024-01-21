@@ -15,6 +15,8 @@ public interface SlotEventRepository extends JpaRepository<AbstractSlotEvent, Sl
 
     AbstractSlotEvent.SlotCreated findFirstSlotCreatedByOrderBySuiTimestampDesc();
 
+    AbstractSlotEvent.CandidateInscriptionPutUpV2 findFirstCandidateInscriptionPutUpV2ByOrderBySuiTimestampDesc();
+
     AbstractSlotEvent.CandidateInscriptionPutUp findFirstCandidateInscriptionPutUpByOrderBySuiTimestampDesc();
 
     AbstractSlotEvent.SlotAdvanced findFirstSlotAdvancedByOrderBySuiTimestampDesc();

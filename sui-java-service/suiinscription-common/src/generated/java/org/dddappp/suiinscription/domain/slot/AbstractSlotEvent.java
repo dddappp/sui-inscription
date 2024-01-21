@@ -255,11 +255,11 @@ public abstract class AbstractSlotEvent extends AbstractEvent implements SlotEve
 
     }
 
-    public static class CandidateInscriptionPutUp extends SlotClobEvent implements SlotEvent.CandidateInscriptionPutUp {
+    public static class CandidateInscriptionPutUpV2 extends SlotClobEvent implements SlotEvent.CandidateInscriptionPutUpV2 {
 
         @Override
         public String getEventType() {
-            return "CandidateInscriptionPutUp";
+            return "CandidateInscriptionPutUpV2";
         }
 
         public String getCandidateInscriptionId() {
@@ -401,6 +401,123 @@ public abstract class AbstractSlotEvent extends AbstractEvent implements SlotEve
 
         public void setRound(BigInteger value) {
             getDynamicProperties().put("round", value);
+        }
+
+    }
+
+    public static class CandidateInscriptionPutUp extends SlotClobEvent implements SlotEvent.CandidateInscriptionPutUp {
+
+        @Override
+        public String getEventType() {
+            return "CandidateInscriptionPutUp";
+        }
+
+        public BigInteger getRound() {
+            Object val = getDynamicProperties().get("round");
+            if (val instanceof BigInteger) {
+                return (BigInteger) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, BigInteger.class);
+        }
+
+        public void setRound(BigInteger value) {
+            getDynamicProperties().put("round", value);
+        }
+
+        public String getCandidateInscriptionId() {
+            Object val = getDynamicProperties().get("candidateInscriptionId");
+            if (val instanceof String) {
+                return (String) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, String.class);
+        }
+
+        public void setCandidateInscriptionId(String value) {
+            getDynamicProperties().put("candidateInscriptionId", value);
+        }
+
+        public int[] getCandidateHash() {
+            Object val = getDynamicProperties().get("candidateHash");
+            if (val instanceof int[]) {
+                return (int[]) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, int[].class);
+        }
+
+        public void setCandidateHash(int[] value) {
+            getDynamicProperties().put("candidateHash", value);
+        }
+
+        public String getCandidateInscriber() {
+            Object val = getDynamicProperties().get("candidateInscriber");
+            if (val instanceof String) {
+                return (String) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, String.class);
+        }
+
+        public void setCandidateInscriber(String value) {
+            getDynamicProperties().put("candidateInscriber", value);
+        }
+
+        public BigInteger getCandidateTimestamp() {
+            Object val = getDynamicProperties().get("candidateTimestamp");
+            if (val instanceof BigInteger) {
+                return (BigInteger) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, BigInteger.class);
+        }
+
+        public void setCandidateTimestamp(BigInteger value) {
+            getDynamicProperties().put("candidateTimestamp", value);
+        }
+
+        public BigInteger getCandidateAmount() {
+            Object val = getDynamicProperties().get("candidateAmount");
+            if (val instanceof BigInteger) {
+                return (BigInteger) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, BigInteger.class);
+        }
+
+        public void setCandidateAmount(BigInteger value) {
+            getDynamicProperties().put("candidateAmount", value);
+        }
+
+        public BigInteger getCandidateNonce() {
+            Object val = getDynamicProperties().get("candidateNonce");
+            if (val instanceof BigInteger) {
+                return (BigInteger) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, BigInteger.class);
+        }
+
+        public void setCandidateNonce(BigInteger value) {
+            getDynamicProperties().put("candidateNonce", value);
+        }
+
+        public BigInteger getCandidateDifference() {
+            Object val = getDynamicProperties().get("candidateDifference");
+            if (val instanceof BigInteger) {
+                return (BigInteger) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, BigInteger.class);
+        }
+
+        public void setCandidateDifference(BigInteger value) {
+            getDynamicProperties().put("candidateDifference", value);
+        }
+
+        public String getCandidateContent() {
+            Object val = getDynamicProperties().get("candidateContent");
+            if (val instanceof String) {
+                return (String) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, String.class);
+        }
+
+        public void setCandidateContent(String value) {
+            getDynamicProperties().put("candidateContent", value);
         }
 
     }
