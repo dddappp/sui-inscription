@@ -300,6 +300,8 @@ aggregates:
     eventObjects:
       CandidateInscriptionPutUp:
         properties:
+          Version:
+            type: u64
           CandidateInscriptionId:
             type: ID
           Round:

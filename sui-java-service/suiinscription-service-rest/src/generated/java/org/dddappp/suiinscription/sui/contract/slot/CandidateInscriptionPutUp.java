@@ -19,6 +19,8 @@ public class CandidateInscriptionPutUp {
 
     private Integer slotNumber;
 
+    private BigInteger version;
+
     private String candidateInscriptionId;
 
     private BigInteger round;
@@ -51,6 +53,14 @@ public class CandidateInscriptionPutUp {
 
     public void setSlotNumber(Integer slotNumber) {
         this.slotNumber = slotNumber;
+    }
+
+    public BigInteger getVersion() {
+        return version;
+    }
+
+    public void setVersion(BigInteger version) {
+        this.version = version;
     }
 
     public String getCandidateInscriptionId() {
@@ -130,6 +140,7 @@ public class CandidateInscriptionPutUp {
         return "CandidateInscriptionPutUp{" +
                 "id=" + '\'' + id + '\'' +
                 ", slotNumber=" + slotNumber +
+                ", version=" + version +
                 ", candidateInscriptionId=" + '\'' + candidateInscriptionId + '\'' +
                 ", round=" + round +
                 ", candidateHash=" + Arrays.toString(candidateHash) +
